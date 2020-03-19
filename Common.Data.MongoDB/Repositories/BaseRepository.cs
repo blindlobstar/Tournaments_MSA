@@ -11,12 +11,9 @@ namespace Common.Data.MongoDB.Repositories
     {
         protected IMongoCollection<TEntity> Collection { get; set; }
 
-        protected BaseRepository(IDatabaseSettings databaseSettings)
+        protected BaseRepository(IBaseContext<TEntity> context)
         {
-            var client = new MongoClient(databaseSettings.ConnectionString);
-            var database = client.GetDatabase(databaseSettings.DatabaseName);
-
-            Collection = database.GetCollection<TEntity>(databaseSettings.CollectionName);
+            Collection = context.GetCollection(context.DatabaseSettings.CollectionName);
         }
 
         public TEntity Add(TEntity entity)
