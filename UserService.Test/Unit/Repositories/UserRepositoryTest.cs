@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Data.MongoDB.Models;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using Moq;
 using NUnit.Framework;
@@ -46,7 +43,7 @@ namespace UserService.Test.Unit.Repositories
                 },
                 new User()
                 {
-                    Id = "5e7398bde6ab1940182c5cfe",
+                    Id = "3e7398bde6ab1940182c5cfe",
                     Login = "Admin",
                     Password = "1234",
                     Name = "Admin",
@@ -105,5 +102,85 @@ namespace UserService.Test.Unit.Repositories
             Assert.AreEqual(_userList.First(), user);
         }
 
+        [Test]
+        public void Add_newuser_newuser()
+        {
+            //Arrange
+            var newUser = new User()
+            {
+                Login = "newUser",
+                Name = "newUSer",
+                Password = "123",
+                Role = "User"
+            };
+            _mockCollection.Setup(c => c.InsertOne(newUser, null, default(CancellationToken)));
+            _mockContext.Setup(c => c.GetCollection(It.IsAny<string>())).Returns(_mockCollection.Object);
+            _repository = new UserRepository(_mockContext.Object);
+
+
+            //Act
+            var user = _repository.Add(newUser);
+
+            //Assert
+            Assert.NotNull(user);
+            Assert.AreEqual("newUSer", user.Name);
+            Assert.NotNull(user.Id);
+        }
+
+        [Test]
+        public void Update_Oleg_Sanya()
+        {
+            //Arrange
+            _mockCollection.Setup(c => 
+                c.ReplaceOne(It.IsAny<FilterDefinition<User>>(), _userList.First(), It.IsAny<ReplaceOptions>(), It.IsAny<CancellationToken>()));
+            _mockContext.Setup(c => c.GetCollection(It.IsAny<string>())).Returns(_mockCollection.Object);
+            _repository = new UserRepository(_mockContext.Object);
+            var user = _userList.First();
+            user.Name = "Sanya";
+
+            //Act
+            _repository.Update(user);
+
+            //Assert
+            _mockCollection.Verify(c => 
+                c.ReplaceOne(It.IsAny<FilterDefinition<User>>(), user, It.IsAny<ReplaceOptions>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Test]
+        public void Delete_Oleg()
+        {
+            //Arrange
+            _mockCollection.Setup(c => 
+                c.DeleteOne(It.IsAny<FilterDefinition<User>>(), It.IsAny<CancellationToken>()));
+            _mockContext.Setup(c => c.GetCollection(It.IsAny<string>())).Returns(_mockCollection.Object);
+            _repository = new UserRepository(_mockContext.Object);
+            var user = _userList.First();
+
+            //Act
+            _repository.Delete(user);
+
+            //Assert
+            _mockCollection.Verify(c => 
+                c.DeleteOne(It.IsAny<FilterDefinition<User>>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Test]
+        public void Delete_id5e7398bde6ab1940182c5cfd()
+        {
+            //Arrange
+            var user = _userList.First();
+            _mockCollection.Setup(c =>
+                c.DeleteOne(It.IsAny<FilterDefinition<User>>(), It.IsAny<CancellationToken>()));
+            _mockContext.Setup(c => c.GetCollection(It.IsAny<string>())).Returns(_mockCollection.Object);
+            _repository = new UserRepository(_mockContext.Object);
+            
+
+            //Act
+            _repository.Delete(user.Id);
+
+            //Assert
+            _mockCollection.Verify(c =>
+                c.DeleteOne(It.IsAny<FilterDefinition<User>>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
     }
 }

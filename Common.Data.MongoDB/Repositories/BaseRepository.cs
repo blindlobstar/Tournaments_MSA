@@ -22,23 +22,32 @@ namespace Common.Data.MongoDB.Repositories
             return entity;
         }
 
-        public virtual void Delete(TEntity entity) =>
-            Collection.DeleteOne(e => e.Id.Equals(entity.Id));
+        public virtual void Delete(TEntity entity)
+        {
+            var filter = Builders<TEntity>.Filter.Eq("_id", entity.Id);
+            Collection.DeleteOne(filter);
+        }
 
-        public virtual void Delete(TKey id) =>
-            Collection.DeleteOne(e => e.Id.Equals(id));
+        public virtual void Delete(TKey id)
+        {
+            var filter = Builders<TEntity>.Filter.Eq("_id", id);
+            Collection.DeleteOne(filter);
+        }
 
         public virtual async Task<List<TEntity>> Get() =>
             await Collection.FindSync(Builders<TEntity>.Filter.Empty,null).ToListAsync();
 
         public virtual async Task<TEntity> Get(TKey id)
         {
-            FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq("_id", id);
+            var filter = Builders<TEntity>.Filter.Eq("_id", id);
             return await Collection.FindSync(filter).FirstOrDefaultAsync();
         }
-            
 
-        public virtual void Update(TEntity entity) =>
-            Collection.ReplaceOne(e => e.Id.Equals(entity.Id), entity);
+
+        public virtual void Update(TEntity entity)
+        {
+            var filter = Builders<TEntity>.Filter.Eq("_id", entity.Id);
+            Collection.ReplaceOne(filter, entity);
+        }
     }
 }
