@@ -11,9 +11,14 @@ namespace UserService.Data.Repositories
     {
         public UserRepository(IBaseContext<User> context) : base(context) { }
 
-        public async Task<User> Authenticate(string login, string password) =>
-            await Collection.Find(u => string.Compare(u.Login, login, false) == 0
-                                       && string.Compare(u.Password, password, false) == 0)
+        public async Task<User> Authenticate(string login, string password)
+        {
+            var filter = Builders<User>.Filter.Eq(user => user.Login, login) 
+                         & Builders<User>.Filter.Eq(user => user.Password, password);
+
+            return await Collection.FindSync(filter)
                 .FirstOrDefaultAsync();
+        }
+            
     }
 }

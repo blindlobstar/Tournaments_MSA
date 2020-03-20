@@ -182,5 +182,20 @@ namespace UserService.Test.Unit.Repositories
             _mockCollection.Verify(c =>
                 c.DeleteOne(It.IsAny<FilterDefinition<User>>(), It.IsAny<CancellationToken>()), Times.Once);
         }
+
+        [Test]
+        public async Task Authenticate_GJOleg1234_Oleg()
+        {
+            //Arrange
+            _repository = new UserRepository(_mockContext.Object);
+            var user = _userList.First();
+
+            //Act
+            var authUser = await _repository.Authenticate(user.Login, user.Password);
+
+            //Assert
+            Assert.NotNull(authUser);
+            Assert.AreEqual("Oleg", authUser.Name);
+        }
     }
 }
