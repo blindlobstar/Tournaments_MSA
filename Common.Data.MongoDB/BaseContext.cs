@@ -17,7 +17,7 @@ namespace Common.Data.MongoDB
             _database = _mongoClient.GetDatabase(databaseSettings.DatabaseName);
         }
 
-        public IMongoCollection<TEntity> GetCollection(string name) =>
+        public virtual IMongoCollection<TEntity> GetCollection(string name) =>
             _database.GetCollection<TEntity>(name);
     }
 }

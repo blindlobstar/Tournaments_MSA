@@ -9,32 +9,36 @@ namespace Common.Data.MongoDB.Repositories
     public abstract class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>, new()
     {
-        protected IMongoCollection<TEntity> Collection { get; set; }
+        protected IMongoCollection<TEntity> Collection { get; }
 
         protected BaseRepository(IBaseContext<TEntity> context)
         {
             Collection = context.GetCollection(context.DatabaseSettings.CollectionName);
         }
 
-        public TEntity Add(TEntity entity)
+        public virtual TEntity Add(TEntity entity)
         {
             Collection.InsertOne(entity);
             return entity;
         }
 
-        public void Delete(TEntity entity) =>
+        public virtual void Delete(TEntity entity) =>
             Collection.DeleteOne(e => e.Id.Equals(entity.Id));
 
-        public void Delete(TKey id) =>
+        public virtual void Delete(TKey id) =>
             Collection.DeleteOne(e => e.Id.Equals(id));
 
-        public async Task<List<TEntity>> Get() =>
-            await Collection.Find(e => true).ToListAsync();
+        public virtual async Task<List<TEntity>> Get() =>
+            await Collection.FindSync(Builders<TEntity>.Filter.Empty,null).ToListAsync();
 
-        public async Task<TEntity> Get(TKey id) =>
-            await Collection.Find(e => e.Id.Equals(id)).FirstOrDefaultAsync();
+        public virtual async Task<TEntity> Get(TKey id)
+        {
+            FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq("_id", id);
+            return await Collection.FindSync(filter).FirstOrDefaultAsync();
+        }
+            
 
-        public void Update(TEntity entity) =>
+        public virtual void Update(TEntity entity) =>
             Collection.ReplaceOne(e => e.Id.Equals(entity.Id), entity);
     }
 }
