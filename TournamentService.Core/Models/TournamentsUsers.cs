@@ -1,4 +1,5 @@
-﻿using Common.Core.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using Common.Core.Data;
 
 namespace TournamentService.Core.Models
 {
@@ -6,6 +7,7 @@ namespace TournamentService.Core.Models
     {
         public int Id { get; set; }
         public int TournamentId { get; set; }
+        [Required]
         public string UserId { get; set; }
         public uint? Place { get; set; }
         public virtual Tournament Tournament { get; set; }
