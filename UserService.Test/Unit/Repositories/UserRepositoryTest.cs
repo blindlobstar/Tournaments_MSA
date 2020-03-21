@@ -80,7 +80,7 @@ namespace UserService.Test.Unit.Repositories
             _repository = new UserRepository(_mockContext.Object);
             
             //Act
-            var users = await _repository.Get();
+            var users = await _repository.GetAll();
 
             //Assert
             Assert.NotNull(users);

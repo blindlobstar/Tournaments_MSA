@@ -5,27 +5,29 @@ VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TornamentService", "TornamentService", "{C72E4C9D-578E-4E1B-B1B8-2F0E2C125FF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentService.API", "TournamentService.API\TournamentService.API.csproj", "{1167BFE8-11F1-4053-BC8D-47FA34285B8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TournamentService.API", "TournamentService.API\TournamentService.API.csproj", "{1167BFE8-11F1-4053-BC8D-47FA34285B8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentService.Core", "TournamentService.Core\TournamentService.Core.csproj", "{6D1F1EF6-6D5D-438F-BC93-07AEBF9A50BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TournamentService.Core", "TournamentService.Core\TournamentService.Core.csproj", "{6D1F1EF6-6D5D-438F-BC93-07AEBF9A50BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentService.Data", "TournamentService.Data\TournamentService.Data.csproj", "{B8DD1F68-514F-4D7C-826E-A953451B7A75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TournamentService.Data", "TournamentService.Data\TournamentService.Data.csproj", "{B8DD1F68-514F-4D7C-826E-A953451B7A75}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserService", "UserService", "{81D5A256-C5F5-44B6-8488-452A7F604844}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Core", "UserService.Core\UserService.Core.csproj", "{54F17692-57AA-4425-94B6-450D08AA17F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Core", "UserService.Core\UserService.Core.csproj", "{54F17692-57AA-4425-94B6-450D08AA17F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Data", "UserService.Data\UserService.Data.csproj", "{BCF91DA3-2D89-467E-94B2-019143B1E2BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Data", "UserService.Data\UserService.Data.csproj", "{BCF91DA3-2D89-467E-94B2-019143B1E2BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.API", "UserService.API\UserService.API.csproj", "{8F6D058D-A938-4837-8FCA-042F86A4DEAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.API", "UserService.API\UserService.API.csproj", "{8F6D058D-A938-4837-8FCA-042F86A4DEAE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{055D89EB-A667-4512-82E3-A6E1437AB896}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Core", "Common.Core\Common.Core.csproj", "{3DB9ACDF-2D8C-4FB3-A419-EC470C8F42F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Core", "Common.Core\Common.Core.csproj", "{3DB9ACDF-2D8C-4FB3-A419-EC470C8F42F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Data.MongoDB", "Common.Data.MongoDB\Common.Data.MongoDB.csproj", "{A7AA7017-A6F0-496F-8301-4A4A9B96F842}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Data.MongoDB", "Common.Data.MongoDB\Common.Data.MongoDB.csproj", "{A7AA7017-A6F0-496F-8301-4A4A9B96F842}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Test", "UserService.Test\UserService.Test.csproj", "{0CC7D33C-8846-4E0F-A924-0E3E06E270EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Test", "UserService.Test\UserService.Test.csproj", "{0CC7D33C-8846-4E0F-A924-0E3E06E270EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Data.EFCore", "Common.Data.EFCore\Common.Data.EFCore.csproj", "{6BD71A9A-289A-4923-A353-59FEF6D35379}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{0CC7D33C-8846-4E0F-A924-0E3E06E270EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CC7D33C-8846-4E0F-A924-0E3E06E270EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CC7D33C-8846-4E0F-A924-0E3E06E270EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BD71A9A-289A-4923-A353-59FEF6D35379}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BD71A9A-289A-4923-A353-59FEF6D35379}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BD71A9A-289A-4923-A353-59FEF6D35379}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BD71A9A-289A-4923-A353-59FEF6D35379}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{3DB9ACDF-2D8C-4FB3-A419-EC470C8F42F6} = {055D89EB-A667-4512-82E3-A6E1437AB896}
 		{A7AA7017-A6F0-496F-8301-4A4A9B96F842} = {055D89EB-A667-4512-82E3-A6E1437AB896}
 		{0CC7D33C-8846-4E0F-A924-0E3E06E270EF} = {81D5A256-C5F5-44B6-8488-452A7F604844}
+		{6BD71A9A-289A-4923-A353-59FEF6D35379} = {055D89EB-A667-4512-82E3-A6E1437AB896}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {85CF0B49-A181-44F2-B892-1B9B0C66AB81}

@@ -34,7 +34,7 @@ namespace Common.Data.MongoDB.Repositories
             Collection.DeleteOne(filter);
         }
 
-        public virtual async Task<List<TEntity>> Get() =>
+        public virtual async Task<List<TEntity>> GetAll() =>
             await Collection.FindSync(Builders<TEntity>.Filter.Empty,null).ToListAsync();
 
         public virtual async Task<TEntity> Get(TKey id)

@@ -5,7 +5,7 @@ namespace Common.Core.Data
 {
     public interface IBaseRepository<TEntity, in TKey> where TEntity : class
     {
-        Task<List<TEntity>> Get();
+        Task<List<TEntity>> GetAll();
         Task<TEntity> Get(TKey id);
         void Update(TEntity entity);
         TEntity Add(TEntity entity);
