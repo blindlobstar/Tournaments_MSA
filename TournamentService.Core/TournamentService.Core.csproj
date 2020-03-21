@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common.Core\Common.Core.csproj" />
+    <ProjectReference Include="..\Common.Data.EFCore\Common.Data.EFCore.csproj" />
   </ItemGroup>
 
 </Project>

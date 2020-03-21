@@ -36,8 +36,10 @@ namespace Common.Data.EFCore.Repositories
 
         public async Task<TEntity> Get(TKey id, IEnumerable<string> includes)
         {
-            var query = includes.Aggregate(DbSet.AsQueryable(), (cur, path) => cur.Include(path));
-            return await query.FirstOrDefaultAsync(x => x.Equals(id));
+            var query = DbSet.AsQueryable();
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+            return await query.SingleOrDefaultAsync(c => c.Id.Equals(id));
+
         }
 
         public async Task<List<TEntity>> GetAll() =>
@@ -58,7 +60,11 @@ namespace Common.Data.EFCore.Repositories
 
         public void Delete(TKey id)
         {
-            throw new System.NotImplementedException();
+            var entity = DbSet.Find(id);
+            _dataContext.Entry(entity).State = EntityState.Deleted;
         }
+
+        public void SaveChanges() =>
+            _dataContext.SaveChanges();
     }
 }
