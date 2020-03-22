@@ -22,19 +22,19 @@ namespace Common.Data.EFCore.Repositories
             return entity;
         }
 
-        public void Delete(TEntity entity)
+        public virtual void Delete(TEntity entity)
         {
             DbSet.Attach(entity);
             _dataContext.Entry(entity).State = EntityState.Deleted;
         }
 
-        public async Task<TEntity> Get(TKey id) =>
+        public virtual async Task<TEntity> Get(TKey id) =>
             await DbSet.FindAsync(id);
 
-        public async Task<TEntity> Get(TKey id, string include) =>
+        public virtual async Task<TEntity> Get(TKey id, string include) =>
             await DbSet.Include(include).FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-        public async Task<TEntity> Get(TKey id, IEnumerable<string> includes)
+        public virtual async Task<TEntity> Get(TKey id, IEnumerable<string> includes)
         {
             var query = DbSet.AsQueryable();
             query = includes.Aggregate(query, (current, include) => current.Include(include));
@@ -42,29 +42,29 @@ namespace Common.Data.EFCore.Repositories
 
         }
 
-        public async Task<List<TEntity>> GetAll() =>
+        public virtual async Task<List<TEntity>> GetAll() =>
             await DbSet.ToListAsync();
 
-        public async Task<List<TEntity>> GetAll(string include) =>
+        public virtual async Task<List<TEntity>> GetAll(string include) =>
             await DbSet.Include(include).ToListAsync();
 
-        public async Task<List<TEntity>> GetAll(IEnumerable<string> includes) =>
+        public virtual async Task<List<TEntity>> GetAll(IEnumerable<string> includes) =>
             await includes.Aggregate(DbSet.AsQueryable(), (cur, path) => 
                 cur.Include(path)).ToListAsync();
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             DbSet.Attach(entity);
             _dataContext.Entry(entity).State = EntityState.Modified;
         }
 
-        public void Delete(TKey id)
+        public virtual void Delete(TKey id)
         {
             var entity = DbSet.Find(id);
             _dataContext.Entry(entity).State = EntityState.Deleted;
         }
 
-        public void SaveChanges() =>
+        public virtual void SaveChanges() =>
             _dataContext.SaveChanges();
     }
 }
