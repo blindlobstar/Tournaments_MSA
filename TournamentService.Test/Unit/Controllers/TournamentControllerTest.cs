@@ -92,8 +92,8 @@ namespace TournamentService.Test.Unit.Controllers
             var tournament = await _tournamentController.Get(1);
 
             //Assert
-            Assert.NotNull(tournament);
-            Assert.AreEqual("New Tournament", tournament.Caption);
+            Assert.NotNull(tournament.Value);
+            Assert.AreEqual("New Tournament", tournament.Value.Caption);
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace TournamentService.Test.Unit.Controllers
 
             //Assert
             Assert.NotNull(tournaments);
-            Assert.Contains("New Tournament", tournaments.Select(t => t.Caption).ToList());
+            Assert.Contains("New Tournament", tournaments.Value.Select(t => t.Caption).ToList());
         }
 
         [Test]
@@ -136,20 +136,24 @@ namespace TournamentService.Test.Unit.Controllers
 
             //Assert
             Assert.NotNull(tournaments);
-            Assert.Contains("New Tournament", tournaments.Select(t => t.Caption).ToList());
-            Assert.Null(tournaments.FirstOrDefault(t => t.Caption == "Absolute New Tournament"));
+            Assert.Contains("New Tournament", tournaments.Value.Select(t => t.Caption).ToList());
+            Assert.Null(tournaments.Value.FirstOrDefault(t => t.Caption == "Absolute New Tournament"));
         }
 
         [Test]
-        public void GetAvailable_datetimeNow_ArgumentNullException()
+        public async Task GetAvailable_datetimeNow_NotFound()
         {
             //Arrange
             var date = DateTime.Now;
             _tournamentRepositoryMock.Setup(r => r.GetAvailable(date));
             _tournamentController = new TournamentController(_tournamentRepositoryMock.Object, _tournamentsUsersRepositoryMock.Object, _exerciseRepositoryMock.Object);
 
+            //Act
+            var response = await _tournamentController.GetAvailable(date);
+
             //Assert
-            Assert.ThrowsAsync<ArgumentException>(() => _tournamentController.GetAvailable(date), "Can't find available tournaments with given date");
+            Assert.IsNotNull(response);
+            Assert.AreEqual(response.Result.GetType(), typeof(Microsoft.AspNetCore.Mvc.NotFoundResult));
         }
     }
 }

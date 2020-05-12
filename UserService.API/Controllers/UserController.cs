@@ -20,25 +20,13 @@ namespace UserService.API.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
         public async Task<List<User>> Get() =>
             await _userRepository.GetAll();
 
+        [HttpGet]
         public async Task<User> Get(string id) =>
             await _userRepository.Get(id);
-
-        public async Task<User> Authenticate(string login, string password) =>
-            await _userRepository.Authenticate(login, password);
-
-        public User Register(string login, string password)
-        {
-            var newUser = new User()
-            {
-                Login = login,
-                Password = password,
-                Role = Roles.User.ToString()
-            };
-
-            return _userRepository.Add(newUser);
-        }
+        
     }
 }

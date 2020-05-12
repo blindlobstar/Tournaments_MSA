@@ -29,147 +29,58 @@ namespace TournamentService.API.Controllers
 
         [Route("/{id}")]
         [HttpGet]
-        public async Task<Tournament> Get(int id)
+        public async Task<ActionResult<Tournament>> Get(int id)
         {
             var tournament = await _tournamentRepository.Get(id);
 
             if (tournament == null)
             {
-                throw new ArgumentException("Can't find tournament with given id");
+                return NotFound();
             }
 
-            return tournament;
+            return Ok(tournament);
         }
 
         [Route("")]
         [HttpGet]
-        public async Task<List<Tournament>> GetAll()
+        public async Task<ActionResult<List<Tournament>>> GetAll()
         {
             var tournaments = await _tournamentRepository.GetAll();
 
             if (tournaments == null || tournaments.Count == 0)
             {
-                throw new ArgumentException("Can't find tournaments");
+                return NotFound();
             }
 
-            return tournaments;
+            return Ok(tournaments);
         }
 
         [Route("/Available/{dateTime}")]
         [HttpGet]
-        public async Task<List<Tournament>> GetAvailable(DateTime dateTime)
+        public async Task<ActionResult<List<Tournament>>> GetAvailable(DateTime dateTime)
         {
             var tournaments = await _tournamentRepository.GetAvailable(dateTime);
 
             if (tournaments == null || tournaments.Count == 0)
             {
-                throw new ArgumentException("Can't find available tournaments with given date");
+                return NotFound();
             }
 
-            return tournaments;
+            return Ok(tournaments);
         }
 
         [Route("/{id}/Exercises")]
         [HttpGet]
-        public async Task<List<Exercise>> GetExercisesForTournament(int id)
+        public async Task<ActionResult<List<Exercise>>> GetExercisesForTournament(int id)
         {
             var exercises = await _exerciseRepository.GetForTournament(id);
 
             if (exercises == null || exercises.Count == 0)
             {
-                throw new ArgumentException("Can't find exercises for given tournament");
+                return NotFound();
             }
 
-            return exercises;
-        }
-
-        [Route("/Add")]
-        [HttpPost]
-        public void Add([FromBody] Tournament tournament)
-        {
-            if (!ModelState.IsValid)
-            {
-                var errorList = (from item in ModelState.Values
-                    from errors in item.Errors
-                    select errors.ErrorMessage).ToList();
-
-                throw new ArgumentException(JsonConvert.SerializeObject(errorList));
-            }
-
-            var addedTournament = _tournamentRepository.Add(tournament);
-
-            if (addedTournament == null)
-            {
-                throw new ArgumentException("Can't add new tournament");
-            }
-
-            _tournamentRepository.SaveChanges();
-        }
-        
-
-        [Route("{tournamentId}/Registration/{userId}")]
-        [HttpPost]
-        public async Task Registration(int tournamentId, string userId)
-        {
-            var tournament = await _tournamentRepository.Get(tournamentId);
-            if (tournament == null)
-            {
-                throw new ArgumentException("Can't find tournament with given id");
-            }
-
-            var tournamentsUsers = new TournamentsUsers()
-            {
-                TournamentId = tournament.Id,
-                UserId = userId
-            };
-
-            var registration = _tournamentsUsersRepository.Add(tournamentsUsers);
-
-            if (registration == null)
-            {
-                throw new ApplicationException("Failed attempt of registration");
-            }
-
-            _tournamentRepository.SaveChanges();
-        }
-
-        [Route("")]
-        [HttpPut]
-        public async Task Update([FromBody] Tournament tournament)
-        {
-            if (!ModelState.IsValid)
-            {
-                var errorList = (from item in ModelState.Values
-                    from errors in item.Errors
-                    select errors.ErrorMessage).ToList();
-
-                throw new ArgumentException(JsonConvert.SerializeObject(errorList));
-            }
-
-            var tournamentForUpdate = await _tournamentRepository.Get(tournament.Id);
-
-            if (tournamentForUpdate == null)
-            {
-                throw new ArgumentException("Can't find tournament with given id");
-            }
-
-            _tournamentRepository.Update(tournament);
-            _tournamentRepository.SaveChanges();
-        }
-
-        [Route("/{id}")]
-        [HttpDelete]
-        public async Task Delete(int id)
-        {
-            var tournamentForDelete = await _tournamentRepository.Get(id);
-
-            if (tournamentForDelete == null)
-            {
-                throw new ArgumentException("Can't find tournament with given id");
-            }
-
-            _tournamentRepository.Delete(id);
-            _tournamentRepository.SaveChanges();
+            return Ok(exercises);
         }
     }
 }

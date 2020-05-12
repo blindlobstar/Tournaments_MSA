@@ -34,13 +34,13 @@ namespace Common.Data.MongoDB.Repositories
             Collection.DeleteOne(filter);
         }
 
-        public virtual async Task<List<TEntity>> GetAll() =>
-            await Collection.FindSync(Builders<TEntity>.Filter.Empty,null).ToListAsync();
+        public virtual Task<List<TEntity>> GetAll() =>
+            Collection.FindSync(Builders<TEntity>.Filter.Empty, null).ToListAsync();
 
-        public virtual async Task<TEntity> Get(TKey id)
+        public virtual Task<TEntity> Get(TKey id)
         {
             var filter = Builders<TEntity>.Filter.Eq("_id", id);
-            return await Collection.FindSync(filter).FirstOrDefaultAsync();
+            return Collection.FindSync(filter).FirstOrDefaultAsync();
         }
 
 

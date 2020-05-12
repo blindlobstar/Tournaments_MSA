@@ -28,28 +28,27 @@ namespace Common.Data.EFCore.Repositories
             _dataContext.Entry(entity).State = EntityState.Deleted;
         }
 
-        public virtual async Task<TEntity> Get(TKey id) =>
-            await DbSet.FindAsync(id);
+        public virtual Task<TEntity> Get(TKey id) =>
+            DbSet.FindAsync(id).AsTask();
 
-        public virtual async Task<TEntity> Get(TKey id, string include) =>
-            await DbSet.Include(include).FirstOrDefaultAsync(x => x.Id.Equals(id));
+        public virtual Task<TEntity> Get(TKey id, string include) =>
+            DbSet.Include(include).FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-        public virtual async Task<TEntity> Get(TKey id, IEnumerable<string> includes)
+        public virtual Task<TEntity> Get(TKey id, IEnumerable<string> includes)
         {
             var query = DbSet.AsQueryable();
             query = includes.Aggregate(query, (current, include) => current.Include(include));
-            return await query.SingleOrDefaultAsync(c => c.Id.Equals(id));
-
+            return query.SingleOrDefaultAsync(c => c.Id.Equals(id));
         }
 
-        public virtual async Task<List<TEntity>> GetAll() =>
-            await DbSet.ToListAsync();
+        public virtual Task<List<TEntity>> GetAll() =>
+            DbSet.ToListAsync();
 
-        public virtual async Task<List<TEntity>> GetAll(string include) =>
-            await DbSet.Include(include).ToListAsync();
+        public virtual Task<List<TEntity>> GetAll(string include) =>
+            DbSet.Include(include).ToListAsync();
 
-        public virtual async Task<List<TEntity>> GetAll(IEnumerable<string> includes) =>
-            await includes.Aggregate(DbSet.AsQueryable(), (cur, path) => 
+        public virtual Task<List<TEntity>> GetAll(IEnumerable<string> includes) =>
+            includes.Aggregate(DbSet.AsQueryable(), (cur, path) => 
                 cur.Include(path)).ToListAsync();
 
         public virtual void Update(TEntity entity)
