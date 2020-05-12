@@ -1,8 +1,17 @@
+using Common.Contracts.TournamentService.Commands;
+using Common.Core.DataExchange.Handlers;
+using Common.EventBus.RabbitMq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TournamentService.API.Handlers.Command;
+using TournamentService.Core.Data;
+using TournamentService.Data;
+using TournamentService.Data.Repositories;
+using TournamentService.Data.Seeds;
 
 namespace TournamentService.API
 {
@@ -19,6 +28,21 @@ namespace TournamentService.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddRabbitMq();
+
+            //Inject repositories
+            services.AddTransient<ITournamentRepository, TournamentRepository>(implementationFactory =>
+            {
+                var options = new DbContextOptionsBuilder<TournamentContext>()
+                    .UseSqlServer(Configuration.GetConnectionString("Default"))
+                    .Options;
+                var context = new TournamentContext(options);
+                context.EnsureSeed();
+                return new TournamentRepository(context);
+            });
+
+            //Inject handlers
+            services.AddTransient<ICommandHandler<AddTournament>, AddTournamentHandler>();
 
         }
 
@@ -40,6 +64,9 @@ namespace TournamentService.API
             {
                 endpoints.MapControllers();
             });
+
+            app.UseRabbitMq()
+                .SubscribeCommand<AddTournament>();
         }
     }
 }

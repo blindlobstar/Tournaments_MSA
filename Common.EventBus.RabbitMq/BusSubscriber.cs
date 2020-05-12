@@ -21,7 +21,7 @@ namespace Common.EventBus.RabbitMq
         public IBusSubscriber SubscribeCommand<TCommand>() where TCommand : class, ICommand
         {
             var subscriptionId = Guid.NewGuid().ToString();
-            _busClient.SubscribeAsync<TCommand>(subscriptionId, async (command) =>
+            _busClient.SubscribeAsync<TCommand>(string.Empty, async (command) =>
             {
                 var handler = (ICommandHandler<TCommand>)_app.ApplicationServices.GetService(typeof(ICommandHandler<TCommand>));
                 await handler.HandleAsync(command);
@@ -32,7 +32,7 @@ namespace Common.EventBus.RabbitMq
         public IBusSubscriber SubscribeEvent<TEvent>() where TEvent : class, IEvent
         {
             var subscriptionId = Guid.NewGuid().ToString();
-            _busClient.SubscribeAsync<TEvent>(subscriptionId, async (@event) =>
+            _busClient.SubscribeAsync<TEvent>(string.Empty, async (@event) =>
             {
                 var handler = (IEventHandler<TEvent>)_app.ApplicationServices.GetService(typeof(IEventHandler<TEvent>));
                 await handler.HandleAsync(@event);

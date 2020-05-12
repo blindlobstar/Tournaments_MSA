@@ -12,10 +12,9 @@ namespace Common.EventBus.RabbitMq
     public class BusPublisher : IBusPublisher
     {
         private readonly IBus _busClient;
-        public BusPublisher(IApplicationBuilder app)
+        public BusPublisher(IBus busClient)
         {
-            _busClient = (IBus)app.ApplicationServices.GetService(typeof(IBus));
-
+            _busClient = busClient;
         }
 
         public Task Publish<TEvent>(TEvent @event) where TEvent : class, IEvent
