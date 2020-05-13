@@ -24,7 +24,7 @@ namespace UserService.API.Controllers
         public async Task<List<User>> Get() =>
             await _userRepository.GetAll();
 
-        [HttpGet]
+        [HttpGet("/{id}")]
         public async Task<User> Get(string id) =>
             await _userRepository.Get(id);
         

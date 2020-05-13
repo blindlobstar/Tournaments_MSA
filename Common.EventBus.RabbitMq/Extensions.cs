@@ -3,16 +3,17 @@ using EasyNetQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.Extensions.Logging;
+using IMessage = Common.Core.DataExchange.Messages.IMessage;
 
 namespace Common.EventBus.RabbitMq
 {
     public static class Extensions
     {
         public static IBusSubscriber UseRabbitMq(this IApplicationBuilder app)
-            => new BusSubscriber(app);
+            => new BusSubscriber(app, 
+                (IBus)app.ApplicationServices.GetService(typeof(IBus)),
+                (ILogger<IMessage>)app.ApplicationServices.GetService(typeof(ILogger<IMessage>)));
 
         public static void AddRabbitMq(this IServiceCollection services)
         {
