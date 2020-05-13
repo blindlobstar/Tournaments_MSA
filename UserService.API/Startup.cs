@@ -1,15 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Common.Contracts.UserService.Commands;
+using Common.Core.DataExchange.Handlers;
+using Common.Data.MongoDB;
+using Common.Data.MongoDB.Models;
+using Common.EventBus.RabbitMq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using UserService.API.Handlers;
+using UserService.Core.Data;
+using UserService.Data;
+using UserService.Data.Repositories;
 
 namespace UserService.API
 {
@@ -26,6 +29,25 @@ namespace UserService.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddLogging(opt =>
+            {
+                opt.AddConsole();
+            });
+
+            services.AddMongoDb();
+
+            services.AddTransient<IUserRepository, UserRepository>(implementationFactory =>
+            {
+                var options = implementationFactory.GetRequiredService<IDatabaseSettings>();
+                var context = new UserContext(options);
+                return new UserRepository(context);
+            });
+
+            //Inject handlers
+            services.AddTransient<ICommandHandler<AddUser>, AddUserHandler>();
+
+            services.AddRabbitMq();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +68,9 @@ namespace UserService.API
             {
                 endpoints.MapControllers();
             });
+
+            app.UseRabbitMq()
+                .SubscribeCommand<AddUser>();
         }
     }
 }

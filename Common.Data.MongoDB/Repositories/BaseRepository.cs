@@ -1,7 +1,6 @@
 ﻿using Common.Core.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Common.Data.MongoDB.Models;
 using MongoDB.Driver;
 
 namespace Common.Data.MongoDB.Repositories
@@ -35,7 +34,7 @@ namespace Common.Data.MongoDB.Repositories
         }
 
         public virtual Task<List<TEntity>> GetAll() =>
-            Collection.FindSync(Builders<TEntity>.Filter.Empty, null).ToListAsync();
+            Collection.FindSync(Builders<TEntity>.Filter.Empty).ToListAsync();
 
         public virtual Task<TEntity> Get(TKey id)
         {

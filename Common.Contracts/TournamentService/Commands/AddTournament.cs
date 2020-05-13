@@ -1,8 +1,5 @@
 ﻿using Common.Core.DataExchange.Messages;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Common.Contracts.TournamentService.Commands
 {

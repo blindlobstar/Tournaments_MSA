@@ -1,8 +1,5 @@
 ﻿using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.Handlers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TournamentService.Core.Data;
 using TournamentService.Core.Models;

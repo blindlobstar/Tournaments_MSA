@@ -1,10 +1,6 @@
 ﻿using Common.Core.DataExchange.EventBus;
 using Common.Core.DataExchange.Messages;
 using EasyNetQ;
-using Microsoft.AspNetCore.Builder;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Common.EventBus.RabbitMq
