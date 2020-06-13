@@ -6,6 +6,6 @@ namespace UserService.Core.Data
 {
     public interface IUserRepository : IBaseRepository<User, string>
     {
-        Task<User> Authenticate(string login, string password);
+
     }
 }

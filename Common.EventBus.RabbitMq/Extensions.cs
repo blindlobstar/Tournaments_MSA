@@ -30,6 +30,8 @@ namespace Common.EventBus.RabbitMq
                 var options = (RabbitMqOptions)service.GetService(typeof(RabbitMqOptions));
                 return RabbitHutch.CreateBus(options.ConnectionString);
             });
+
+            services.AddTransient<IBusPublisher, BusPublisher>();
         }
     }
 }

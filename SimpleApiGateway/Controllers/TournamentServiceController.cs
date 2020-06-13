@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.EventBus;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SimpleApiGateway.Controllers
@@ -20,6 +21,7 @@ namespace SimpleApiGateway.Controllers
             "TournamentService is working";
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post(AddTournament tournament)
         {
             await _busPublisher.Send(tournament);

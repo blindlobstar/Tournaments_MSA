@@ -1,7 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Common.Contracts.UserService.Commands;
 using Common.Core.DataExchange.EventBus;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SimpleApiGateway.Requests;
 
 namespace SimpleApiGateway.Controllers
 {
@@ -16,9 +21,23 @@ namespace SimpleApiGateway.Controllers
             _busPublisher = busPublisher;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post(AddUser command)
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> Put(UppdateUserInformation request)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var id = claim.FirstOrDefault(x => x.Type == "userId");
+
+            var command = new UpdateUser()
+            {
+                Id = id.Value,
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                MiddleName = request.MiddleName,
+                Phone = request.Phone
+            };
             await _busPublisher.Send(command);
             return Ok();
         }

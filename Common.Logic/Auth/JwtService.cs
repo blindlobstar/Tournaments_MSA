@@ -36,8 +36,9 @@ namespace Common.Logic.Auth
 
             var jwt = new JwtSecurityToken(
                 issuer: _jwtOptions.Issuer,
+                audience: _jwtOptions.Audience,
                 claims: payload,
-                expires: DateTime.UtcNow.AddMinutes(5),
+                expires: DateTime.UtcNow.AddMinutes(_jwtOptions.Lifetime),
                 signingCredentials: _signingCredentials
                 );
 

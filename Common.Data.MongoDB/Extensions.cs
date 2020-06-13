@@ -10,7 +10,7 @@ namespace Common.Data.MongoDB
         {
             services.AddSingleton<IDatabaseSettings, DatabaseSettings>(opt =>
             {
-                var configuration = (IConfiguration)opt.GetService(typeof(IConfiguration));
+                var configuration = (IConfiguration) opt.GetService(typeof(IConfiguration));
                 var options = new DatabaseSettings();
                 configuration.GetSection("MongoDb").Bind(options);
                 return options;

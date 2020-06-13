@@ -1,5 +1,6 @@
 using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.Handlers;
+using Common.Data.EFCore;
 using Common.EventBus.RabbitMq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,17 +37,12 @@ namespace TournamentService.API
             });
 
             services.AddRabbitMq();
+            services.AddEfCore();
 
             //Inject repositories
-            services.AddTransient<ITournamentRepository, TournamentRepository>(implementationFactory =>
-            {
-                var options = new DbContextOptionsBuilder<TournamentContext>()
-                    .UseSqlServer(Configuration.GetConnectionString("Default"))
-                    .Options;
-                var context = new TournamentContext(options);
-                context.EnsureSeed();
-                return new TournamentRepository(context);
-            });
+            services.AddTransient<ITournamentRepository, TournamentRepository>();
+            services.AddTransient<ITournamentsUsersRepository, TournamentsUsersRepository>();
+            services.AddTransient<IExerciseRepository, ExerciseRepository>();
 
             //Inject handlers
             services.AddTransient<ICommandHandler<AddTournament>, AddTournamentHandler>();

@@ -6,7 +6,7 @@ using MongoDB.Driver;
 
 namespace IdentityService.API.Repositories
 {
-    public class UserRepository : BaseRepository<User, string>, IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
         public UserRepository(IBaseContext<User> context) : base(context) { }
 

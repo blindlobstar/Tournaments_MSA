@@ -7,18 +7,8 @@ using UserService.Core.Models;
 
 namespace UserService.Data.Repositories
 {
-    public class UserRepository : BaseRepository<User, string>, IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
         public UserRepository(IBaseContext<User> context) : base(context) { }
-
-        public async Task<User> Authenticate(string login, string password)
-        {
-            var filter = Builders<User>.Filter.Eq(user => user.Login, login) 
-                         & Builders<User>.Filter.Eq(user => user.Password, password);
-
-            return await Collection.FindSync(filter)
-                .FirstOrDefaultAsync();
-        }
-            
     }
 }

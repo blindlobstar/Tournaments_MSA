@@ -1,46 +1,78 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
+using Common.Contracts.IdentityService.Events;
 using Common.Core.Auth;
+using Common.Core.DataExchange.EventBus;
 using IdentityService.API.Domain;
 using IdentityService.API.Repositories;
+using IdentityService.API.Requests;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace IdentityService.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class IdentityController : ControllerBase
     {
-        private readonly IJwtService _jwtService;
-        private readonly ILogger _logger;
-        private readonly IUserRepository _userRepository;
+        private readonly byte[] _salt;
 
-        public IdentityController(IJwtOptions jwtOptions, IJwtService jwtService, 
-            ILogger logger, IUserRepository userRepository)
+        private readonly IJwtService _jwtService;
+        private readonly IUserRepository _userRepository;
+        private readonly IBusPublisher _busPublisher;
+
+        public IdentityController(IJwtService jwtService, IUserRepository userRepository,
+            IBusPublisher busPublisher)
         {
+            _salt = Encoding.ASCII.GetBytes("SaltSaltSalt");
             _jwtService = jwtService;
-            _logger = logger;
             _userRepository = userRepository;
+            _busPublisher = busPublisher;
         }
 
         [HttpPost]
-        [Route("/signUp/")]
-        public async Task<ActionResult> SignUp(User user)
-        {
-            var existingUser = await _userRepository.GetByLogin(user.Login);
-            if (existingUser != null)
+        [Route("signUp/")]
+        public async Task<ActionResult> SignUp(SignUser user)
+        {   
+            if (await _userRepository.GetByLogin(user.Login) != null)
             {
                 return BadRequest();
             }
             
-            var newUser = _userRepository.Add(user);
-            _logger.LogInformation($"New user has sign up with id: {newUser.Id}");
+            var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: user.Password,
+                salt: _salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+            
+            var newUser = new User()
+            {
+                Login = user.Login,
+                Password = hashed,
+                Role = Roles.User.ToString()
+            };
+            newUser = _userRepository.Add(newUser);
+
+            await _busPublisher.Publish(new UserAdded() { Id = newUser.Id, Login = newUser.Login });
+            
             return Ok();
         }
 
         [HttpPost]
-        [Route("/SignIn/")]
-        public async Task<ActionResult<IJwtToken>> SignIn(User user)
+        [Route("SignIn/")]
+        public async Task<ActionResult<IJwtToken>> SignIn(SignUser user)
         {
-            var authUser = await _userRepository.Authenticate(user.Login, user.Password);
+            var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: user.Password,
+                salt: _salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+            
+            var authUser = await _userRepository.Authenticate(user.Login, hashed);
 
             if (authUser == null)
             {

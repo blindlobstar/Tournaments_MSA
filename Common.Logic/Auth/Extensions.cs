@@ -15,13 +15,13 @@ namespace Common.Logic.Auth
             {
                 var configuration = (IConfiguration)opt.GetService(typeof(IConfiguration));
                 var options = new JwtOptions();
-                configuration.Bind(options);
+                configuration.GetSection("JwtOptions").Bind(options);
                 return options;
             });
 
             services.AddTransient<IJwtService>(opt =>
             {
-                var options = (IJwtOptions) opt.GetService((typeof(IJwtOptions)));
+                var options = (IJwtOptions) opt.GetService(typeof(IJwtOptions));
                 return new JwtService(options);
             });
             

@@ -1,3 +1,4 @@
+using Common.Contracts.IdentityService.Events;
 using Common.Contracts.UserService.Commands;
 using Common.Core.DataExchange.Handlers;
 using Common.Data.MongoDB;
@@ -36,6 +37,7 @@ namespace UserService.API
             });
 
             services.AddMongoDb();
+            services.AddRabbitMq();
 
             services.AddTransient<IUserRepository, UserRepository>(implementationFactory =>
             {
@@ -45,9 +47,8 @@ namespace UserService.API
             });
 
             //Inject handlers
-            services.AddTransient<ICommandHandler<AddUser>, AddUserHandler>();
-
-            services.AddRabbitMq();
+            services.AddTransient<IEventHandler<UserAdded>, UserAddedHandler>();
+            services.AddTransient<ICommandHandler<UpdateUser>, UpdateUserHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,7 +71,8 @@ namespace UserService.API
             });
 
             app.UseRabbitMq()
-                .SubscribeCommand<AddUser>();
+                .SubscribeEvent<UserAdded>()
+                .SubscribeCommand<UpdateUser>();
         }
     }
 }
