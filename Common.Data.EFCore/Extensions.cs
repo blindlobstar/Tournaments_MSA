@@ -21,7 +21,8 @@ namespace Common.Data.EFCore
             {
                 var configuration = (IConfiguration)opt.GetService(typeof(IConfiguration));
                 var options = dbContextOptionsBuilder
-                    .UseSqlServer(configuration.GetConnectionString("Default"))
+                    .UseSqlServer(configuration.GetConnectionString("Default"),
+                    x => x.MigrationsAssembly("TournamentService.Data"))
                     .Options;
                 var context = Activator.CreateInstance(contextType, options);
                 return context;

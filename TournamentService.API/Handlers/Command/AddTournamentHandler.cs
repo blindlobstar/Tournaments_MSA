@@ -1,6 +1,9 @@
 ﻿using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.Handlers;
+using Hangfire;
+using System;
 using System.Threading.Tasks;
+using TournamentService.API.Logic;
 using TournamentService.Core.Data;
 using TournamentService.Core.Models;
 
@@ -9,12 +12,15 @@ namespace TournamentService.API.Handlers.Command
     public class AddTournamentHandler : ICommandHandler<AddTournament>
     {
         private readonly ITournamentRepository _tournamentRepository;
-        public AddTournamentHandler(ITournamentRepository tournamentRepository)
+        private readonly CalculateTournamentResult _calculateTournamentResult;
+        public AddTournamentHandler(ITournamentRepository tournamentRepository,
+            CalculateTournamentResult calculateTournamentResult)
         {
             _tournamentRepository = tournamentRepository;
+            _calculateTournamentResult = calculateTournamentResult;
         }
 
-        public Task HandleAsync(AddTournament command)
+        public async Task HandleAsync(AddTournament command)
         {
             var newTournament = new Tournament()
             {
@@ -23,8 +29,10 @@ namespace TournamentService.API.Handlers.Command
                 EndDate = command.EndDate,
                 StartDate = command.StartDate
             };
-            _tournamentRepository.Add(newTournament);
-            return Task.Run( () => _tournamentRepository.SaveChanges());
+            await _tournamentRepository.Add(newTournament);
+            await _tournamentRepository.SaveChanges();
+            BackgroundJob.Schedule(() => _calculateTournamentResult.Calculate(newTournament.Id), 
+                newTournament.EndDate.Subtract(DateTime.Now));
         }
     }
 }

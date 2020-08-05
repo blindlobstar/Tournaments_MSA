@@ -11,6 +11,6 @@ namespace Common.Data.EFCore.Repositories
         Task<List<TEntity>> GetAll(IEnumerable<string> includes);
         Task<TEntity> Get(TKey id, string include);
         Task<TEntity> Get(TKey id, IEnumerable<string> includes);
-        void SaveChanges();
+        Task SaveChanges();
     }
 }

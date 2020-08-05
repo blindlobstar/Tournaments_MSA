@@ -21,10 +21,27 @@ namespace SimpleApiGateway.Controllers
             "TournamentService is working";
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post(AddTournament tournament)
         {
             await _busPublisher.Send(tournament);
+            return Ok();
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Put(UpdateTournament tournament)
+        {
+            await _busPublisher.Send(tournament);
+            return Ok();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [Route("registrate")]
+        public async Task<IActionResult> Registrate(RegisterUser user)
+        {
+            await _busPublisher.Send(user);
             return Ok();
         }
     }

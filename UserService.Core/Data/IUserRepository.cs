@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
-using Common.Core.Data;
+﻿using Common.Data.MongoDB.Repositories;
 using UserService.Core.Models;
 
 namespace UserService.Core.Data
 {
-    public interface IUserRepository : IBaseRepository<User, string>
+    public interface IUserRepository : IMongoRepository<User>
     {
 
     }

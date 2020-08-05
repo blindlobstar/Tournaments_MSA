@@ -8,8 +8,8 @@ namespace Common.Core.Data
         Task<List<TEntity>> GetAll();
         Task<TEntity> Get(TKey id);
         void Update(TEntity entity);
-        TEntity Add(TEntity entity);
+        Task Add(TEntity entity);
         void Delete(TEntity entity);
-        void Delete(TKey id);
+        Task Delete(TKey id);
     }
 }

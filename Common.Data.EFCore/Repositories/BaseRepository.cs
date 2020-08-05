@@ -16,10 +16,9 @@ namespace Common.Data.EFCore.Repositories
             _dataContext = dataContext;
         }
 
-        public TEntity Add(TEntity entity)
+        public virtual async Task Add(TEntity entity)
         {
-            DbSet.Add(entity);
-            return entity;
+            await DbSet.AddAsync(entity);
         }
 
         public virtual void Delete(TEntity entity)
@@ -57,13 +56,13 @@ namespace Common.Data.EFCore.Repositories
             _dataContext.Entry(entity).State = EntityState.Modified;
         }
 
-        public virtual void Delete(TKey id)
+        public virtual async Task Delete(TKey id)
         {
-            var entity = DbSet.Find(id);
+            var entity = await DbSet.FindAsync(id);
             _dataContext.Entry(entity).State = EntityState.Deleted;
         }
 
-        public virtual void SaveChanges() =>
-            _dataContext.SaveChanges();
+        public virtual Task SaveChanges() =>
+            _dataContext.SaveChangesAsync();
     }
 }

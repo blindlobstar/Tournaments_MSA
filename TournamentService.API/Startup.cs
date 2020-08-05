@@ -2,18 +2,20 @@ using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.Handlers;
 using Common.Data.EFCore;
 using Common.EventBus.RabbitMq;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 using TournamentService.API.Handlers.Command;
+using TournamentService.API.Logic;
 using TournamentService.Core.Data;
 using TournamentService.Data;
 using TournamentService.Data.Repositories;
-using TournamentService.Data.Seeds;
 
 namespace TournamentService.API
 {
@@ -38,15 +40,37 @@ namespace TournamentService.API
 
             services.AddRabbitMq();
             services.AddEfCore();
+            services.AddDbContext<TournamentContext>();
+
+            // Add Hangfire services.
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
 
             //Inject repositories
             services.AddTransient<ITournamentRepository, TournamentRepository>();
             services.AddTransient<ITournamentsUsersRepository, TournamentsUsersRepository>();
             services.AddTransient<IExerciseRepository, ExerciseRepository>();
+            services.AddTransient<IExercisesUsersRepository, ExercisesUsersRepository>();
 
             //Inject handlers
             services.AddTransient<ICommandHandler<AddTournament>, AddTournamentHandler>();
-
+            services.AddTransient<ICommandHandler<UpdateTournament>, UpdateTournamentHandler>();
+            services.AddTransient<ICommandHandler<RegisterUser>, RegisterUserHandler>();
+            
+            services.AddTransient<CalculateTournamentResult>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,7 +93,9 @@ namespace TournamentService.API
             });
 
             app.UseRabbitMq()
-                .SubscribeCommand<AddTournament>();
+                .SubscribeCommand<AddTournament>()
+                .SubscribeCommand<UpdateTournament>()
+                .SubscribeCommand<RegisterUser>();
         }
     }
 }

@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Common.Data.MongoDB.Repositories
 {
-    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity, string>
+    public abstract class BaseRepository<TEntity> : IMongoRepository<TEntity>
         where TEntity : class, IEntity<string>, new()
     {
         protected IMongoCollection<TEntity> Collection { get; }
@@ -16,10 +16,9 @@ namespace Common.Data.MongoDB.Repositories
             Collection = context.GetCollection(context.DatabaseSettings.CollectionName);
         }
 
-        public virtual TEntity Add(TEntity entity)
+        public virtual Task Add(TEntity entity)
         {
-            Collection.InsertOne(entity);
-            return entity;
+            return Collection.InsertOneAsync(entity);
         }
 
         public virtual void Delete(TEntity entity)
@@ -28,10 +27,10 @@ namespace Common.Data.MongoDB.Repositories
             Collection.DeleteOne(filter);
         }
 
-        public virtual void Delete(string id)
+        public virtual Task Delete(string id)
         {
             var filter = Builders<TEntity>.Filter.Eq("_id", ObjectId.Parse(id));
-            Collection.DeleteOne(filter);
+            return Collection.DeleteOneAsync(filter);
         }
 
         public virtual Task<List<TEntity>> GetAll() =>
@@ -48,11 +47,16 @@ namespace Common.Data.MongoDB.Repositories
             return Collection.FindSync(filter).FirstOrDefaultAsync();
         }
 
-
         public virtual void Update(TEntity entity)
         {
             var filter = Builders<TEntity>.Filter.Eq("_id", ObjectId.Parse(entity.Id));
             Collection.ReplaceOne(filter, entity);
+        }
+
+        public virtual Task UpdateAsync(TEntity entity)
+        {
+            var filter = Builders<TEntity>.Filter.Eq("_id", ObjectId.Parse(entity.Id));
+            return Collection.ReplaceOneAsync(filter, entity);
         }
     }
 }

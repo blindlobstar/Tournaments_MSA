@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Common.Contracts.UserService.Commands;
+using Common.Core.Auth;
 using Common.Core.DataExchange.EventBus;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,11 +28,11 @@ namespace SimpleApiGateway.Controllers
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claim = identity.Claims;
-            var id = claim.FirstOrDefault(x => x.Type == "userId");
+            var id = claim.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
 
             var command = new UpdateUser()
             {
-                Id = id.Value,
+                Id = id,
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,

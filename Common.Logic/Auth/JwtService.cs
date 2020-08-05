@@ -25,8 +25,8 @@ namespace Common.Logic.Auth
         public IJwtToken CreateToken(string userId, string role, Dictionary<string, string> claims = null)
         {
             var payload = new List<Claim>{
-                new Claim("userId", userId),
-                new Claim("role", role)
+                new Claim(ClaimTypes.Name, userId),
+                new Claim(ClaimTypes.Role, role)
             };
 
             var customClaims = claims?.Select(claim => new Claim(claim.Key, claim.Value)).ToArray() ??

@@ -31,7 +31,7 @@ namespace UserService.API.Handlers
             user.Email = string.IsNullOrWhiteSpace(command.Email) ? user.Email : command.Email;
             user.FirstName = string.IsNullOrWhiteSpace(command.FirstName) ? user.FirstName : command.FirstName;
 
-            _userRepository.Update(user);
+            await _userRepository.UpdateAsync(user);
         }
     }
 }

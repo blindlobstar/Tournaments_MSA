@@ -135,7 +135,7 @@ namespace TournamentService.Test.Unit.Repositories
         }
 
         [Test]
-        public void Add_ABCTournament()
+        public async Task Add_ABCTournament()
         {
             //Arrange
             var tournament = new Tournament()
@@ -146,12 +146,13 @@ namespace TournamentService.Test.Unit.Repositories
             };
 
             //Act
-            var newTournament = _tournamentRepository.Add(tournament);
+            await _tournamentRepository.Add(tournament);
+            await _tournamentRepository.SaveChanges();
 
             //Assert
-            Assert.NotNull(newTournament);
-            Assert.Greater(newTournament.Id, 1);
-            Assert.AreEqual("ABCTournament", newTournament.Caption);
+            Assert.NotNull(tournament);
+            Assert.Greater(tournament.Id, 1);
+            Assert.AreEqual("ABCTournament", tournament.Caption);
         }
 
         [Test]
@@ -163,6 +164,7 @@ namespace TournamentService.Test.Unit.Repositories
 
             //Act
             _tournamentRepository.Update(tournament);
+            await _tournamentRepository.SaveChanges();
             var updatedTournament = await _tournamentRepository.Get(1);
 
             //Assert
@@ -202,7 +204,7 @@ namespace TournamentService.Test.Unit.Repositories
 
             //Act
             _tournamentRepository.Delete(tournament);
-            _tournamentRepository.SaveChanges();
+            await _tournamentRepository.SaveChanges();
             var deletedTournament = await _tournamentRepository.Get(1);
 
             //Assert
@@ -213,8 +215,8 @@ namespace TournamentService.Test.Unit.Repositories
         public async Task Delete_1_null()
         {
             //Act
-            _tournamentRepository.Delete(1);
-            _tournamentRepository.SaveChanges();
+            await _tournamentRepository.Delete(1);
+            await _tournamentRepository.SaveChanges();
             var deletedTournament = await _tournamentRepository.Get(1);
 
             //Assert

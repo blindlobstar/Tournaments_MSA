@@ -9,7 +9,6 @@ using IdentityService.API.Repositories;
 using IdentityService.API.Requests;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace IdentityService.API.Controllers
 {
@@ -54,7 +53,7 @@ namespace IdentityService.API.Controllers
                 Password = hashed,
                 Role = Roles.User.ToString()
             };
-            newUser = _userRepository.Add(newUser);
+            await _userRepository.Add(newUser);
 
             await _busPublisher.Publish(new UserAdded() { Id = newUser.Id, Login = newUser.Login });
             

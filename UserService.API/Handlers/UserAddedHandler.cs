@@ -14,14 +14,14 @@ namespace UserService.API.Handlers
         {
             _userRepository = userRepository;
         }
-        public Task HandleAsync(UserAdded @event)
+        public async Task HandleAsync(UserAdded @event)
         {
             var user = new User()
             {
                 Id = @event.Id,
                 Login = @event.Login
             };
-            return Task.Run(() => _userRepository.Add(user));
+            await _userRepository.Add(user);
         }
     }
 }
