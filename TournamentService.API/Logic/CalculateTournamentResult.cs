@@ -41,7 +41,7 @@ namespace TournamentService.API.Logic
             var userAnswers = await _exercisesUsersRepository.GetForExercises(exercises.Select(e => e.Id));
             Parallel.ForEach(userAnswers, (currentAnswer) =>
             {
-                var answer = exercises.Find(e => e.Id == currentAnswer.ExerciseId).Answer;
+                var answer = exercises.Find(e => e.Id == currentAnswer.ExerciseId)?.Answer;
                 currentAnswer.IsCorrect = IsAnswerCorrect(answer, currentAnswer.UserAnswer);
                 _exercisesUsersRepository.Update(currentAnswer);
             });

@@ -16,6 +16,7 @@ namespace TournamentService.Test.Unit.Repositories
     {
         private ITournamentRepository _tournamentRepository;
         private DbContextOptions<TournamentContext> _options;
+        private Tournament _baseTournament;
 
         [SetUp]
         public void Setup()
@@ -28,6 +29,15 @@ namespace TournamentService.Test.Unit.Repositories
             var tournamentContext = new TournamentContext(_options);
             
             _tournamentRepository = new TournamentRepository(tournamentContext);
+            _baseTournament = new Tournament()
+            {
+                Id = 1,
+                Caption = "New Tournament",
+                Description = "First added tournament",
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(3),
+                TournamentTime = 20
+            };
         }
 
         [Test]
@@ -197,18 +207,20 @@ namespace TournamentService.Test.Unit.Repositories
         }
 
         [Test]
-        public async Task Delete_NewTournament_null()
+        public async Task Delete_OldTournament_null()
         {
             //Arrange
-            var tournament = await _tournamentRepository.Get(1);
+            var tournament = await _tournamentRepository.Get(2);
 
             //Act
             _tournamentRepository.Delete(tournament);
             await _tournamentRepository.SaveChanges();
-            var deletedTournament = await _tournamentRepository.Get(1);
+            var deletedTournament = await _tournamentRepository.Get(2);
 
             //Assert
             Assert.Null(deletedTournament);
+            await _tournamentRepository.Add(tournament);
+            await _tournamentRepository.SaveChanges();
         }
 
         [Test]
@@ -221,6 +233,8 @@ namespace TournamentService.Test.Unit.Repositories
 
             //Assert
             Assert.Null(deletedTournament);
+            await _tournamentRepository.Add(_baseTournament);
+            await _tournamentRepository.SaveChanges();
         }
 
     }
