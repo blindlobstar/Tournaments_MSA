@@ -12,8 +12,6 @@ namespace TournamentService.Core.Models
         public string UserId { get; set; }
         public string UserAnswer { get; set; }
         public bool IsCorrect { get; set; }
-        public DateTime Created { get; set; }
-
         public virtual Exercise Exercise { get; set; }
     }
 }

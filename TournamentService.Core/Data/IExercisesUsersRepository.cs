@@ -9,5 +9,6 @@ namespace TournamentService.Core.Data
     {
         Task AddAnswer(int ExerciseId, string userId, string Answer);
         Task<List<ExercisesUsers>> GetForExercises(IEnumerable<int> exercisesId);
+        Task<List<ExercisesUsers>> GetForCalculating(int tournamentId);
     }
 }

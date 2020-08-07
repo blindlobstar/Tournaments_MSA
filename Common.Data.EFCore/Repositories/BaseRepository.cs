@@ -8,7 +8,7 @@ namespace Common.Data.EFCore.Repositories
 {
     public abstract class BaseRepository<TEntity, TKey> : IEFRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>, new()
     {
-        private readonly DbContext _dataContext;
+        protected readonly DbContext _dataContext;
         protected DbSet<TEntity> DbSet => _dataContext.Set<TEntity>();
 
         protected BaseRepository(DbContext dataContext)

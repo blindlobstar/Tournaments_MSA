@@ -14,57 +14,38 @@ namespace TournamentService.API.Logic
         public string UserId { get; set; }
         public int CorrectCount { get; set; }
         public double TimeDiff { get; set; }
+        public TournamentsUsers TournamentsUsers { get; set; }
     }
 
     public class CalculateTournamentResult
     {
-        private readonly ITournamentRepository _tournamentRepository;
-        private readonly IExerciseRepository _exerciseRepository;
         private readonly IExercisesUsersRepository _exercisesUsersRepository;
         private readonly ITournamentsUsersRepository _tournamentsUsersRepository;
         private readonly IBusPublisher _busPublisher;
 
-        public CalculateTournamentResult(ITournamentRepository tournamentRepository,
-            IExercisesUsersRepository exercisesUsersRepository,
-            IExerciseRepository exerciseRepository,
+        public CalculateTournamentResult(IExercisesUsersRepository exercisesUsersRepository,
+            ITournamentsUsersRepository tournamentsUsersRepository,
             IBusPublisher busPublisher)
         {
-            _tournamentRepository = tournamentRepository;
-            _exerciseRepository = exerciseRepository;
             _exercisesUsersRepository = exercisesUsersRepository;
+            _tournamentsUsersRepository = tournamentsUsersRepository;
             _busPublisher = busPublisher;
         }
 
         public async Task Calculate(int tournamentId)
         {
-            var exercises = await _exerciseRepository.GetForTournament(tournamentId);
-            var userAnswers = await _exercisesUsersRepository.GetForExercises(exercises.Select(e => e.Id));
-            Parallel.ForEach(userAnswers, (currentAnswer) =>
-            {
-                var answer = exercises.Find(e => e.Id == currentAnswer.ExerciseId)?.Answer;
-                currentAnswer.IsCorrect = IsAnswerCorrect(answer, currentAnswer.UserAnswer);
-                _exercisesUsersRepository.Update(currentAnswer);
-            });
-
-            var tournament = await _tournamentRepository.Get(tournamentId);
-            int lastExercise = exercises.OrderByDescending(e => e.OrderNumber.Value).FirstOrDefault().Id;
-            int firstExercise = exercises.OrderBy(e => e.OrderNumber.Value).FirstOrDefault().Id;
-            var users = await _tournamentsUsersRepository.GetForTournament(tournamentId);
-            var winner = GetFirstPlace(users, userAnswers, firstExercise, lastExercise);
-            var tournamentUserWinner = users.Find(u => u.UserId == winner);
-            tournamentUserWinner.Place = 1;
-            _tournamentsUsersRepository.Update(tournamentUserWinner);
-
-            //Заменить это на UOW
-            await _exercisesUsersRepository.SaveChanges();
-            await _tournamentsUsersRepository.SaveChanges();
+            var usersExercises = await _exercisesUsersRepository.GetForCalculating(tournamentId);
+            var usersTournaments = await _tournamentsUsersRepository.GetForTournament(tournamentId);
             
-            await _busPublisher.Publish(new TournamentEnded()
+            Parallel.ForEach(usersExercises, (current) =>
             {
-                TournamentId = tournamentUserWinner.TournamentId,
-                WinnerUserId = tournamentUserWinner.UserId
+                current.IsCorrect = IsAnswerCorrect(current.Exercise.Answer, current.UserAnswer);
             });
 
+            GetPlaces(usersTournaments, usersExercises);
+
+            await _tournamentsUsersRepository.SaveChanges();
+            await _exercisesUsersRepository.SaveChanges();
         }
 
         public bool IsAnswerCorrect(string correctAnswer, string userAnswer)
@@ -76,25 +57,24 @@ namespace TournamentService.API.Logic
             return string.Compare(correctAnswer, sb.ToString(), true) == 0;
         }
 
-        public string GetFirstPlace(List<TournamentsUsers> tournamentsUsers, List<ExercisesUsers> userAnswers,
-            int firstExercise, int lastExercise)
-        {
-            var userList = new List<UserWhoAnswered>();
-
-            foreach (var registeredUser in tournamentsUsers)
-            {
-                var startTime = userAnswers.Find(a => a.UserId == registeredUser.UserId && a.ExerciseId == firstExercise).Created;
-                var lastTime = userAnswers.Find(a => a.UserId == registeredUser.UserId && a.ExerciseId == lastExercise).Created;
-                userList.Add(new UserWhoAnswered()
-                {
-                    CorrectCount = userAnswers.Where(a => a.UserId == registeredUser.UserId && a.IsCorrect).Count(),
-                    TimeDiff = lastTime.Subtract(startTime).TotalSeconds,
-                    UserId = registeredUser.UserId
-                });
-            }
-
-            return userList.OrderByDescending(u => u.CorrectCount)
-                .ThenBy(u => u.TimeDiff).FirstOrDefault().UserId;
-        }
+        public IEnumerable<TournamentsUsers> GetPlaces(List<TournamentsUsers> tournamentsUsers, List<ExercisesUsers> userAnswers)
+         => (from userScore in userAnswers
+                         where userScore.IsCorrect
+                         group userScore by userScore.UserId into groupUserScore
+                         join ut in tournamentsUsers
+                         on groupUserScore.Key equals ut.UserId
+                         select new UserWhoAnswered()
+                         {
+                             CorrectCount = groupUserScore.Count(),
+                             UserId = groupUserScore.Key,
+                             TimeDiff = (ut.EndDate - ut.StartDate).TotalMinutes,
+                             TournamentsUsers = ut
+                         }).OrderBy(x => x.CorrectCount)
+                         .ThenByDescending(x => x.TimeDiff)
+                         .Select((a, i) =>
+                         {
+                             a.TournamentsUsers.Place = (uint)i + 1;
+                             return a.TournamentsUsers;
+                         });
     }
 }
