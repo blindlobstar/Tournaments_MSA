@@ -21,15 +21,12 @@ namespace TournamentService.API.Logic
     {
         private readonly IExercisesUsersRepository _exercisesUsersRepository;
         private readonly ITournamentsUsersRepository _tournamentsUsersRepository;
-        private readonly IBusPublisher _busPublisher;
 
         public CalculateTournamentResult(IExercisesUsersRepository exercisesUsersRepository,
-            ITournamentsUsersRepository tournamentsUsersRepository,
-            IBusPublisher busPublisher)
+            ITournamentsUsersRepository tournamentsUsersRepository)
         {
             _exercisesUsersRepository = exercisesUsersRepository;
             _tournamentsUsersRepository = tournamentsUsersRepository;
-            _busPublisher = busPublisher;
         }
 
         public async Task Calculate(int tournamentId)
