@@ -67,7 +67,7 @@ namespace TournamentService.API.Logic
                              TimeDiff = (ut.EndDate - ut.StartDate).TotalMinutes,
                              TournamentsUsers = ut
                          }).OrderBy(x => x.CorrectCount)
-                         .ThenByDescending(x => x.TimeDiff)
+                         .ThenBy(x => x.TimeDiff)
                          .Select((a, i) =>
                          {
                              a.TournamentsUsers.Place = (uint)i + 1;

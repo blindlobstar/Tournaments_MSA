@@ -81,79 +81,79 @@ namespace TournamentService.Test.Unit.Controllers
             _tournamentsUsersRepositoryMock = new Mock<ITournamentsUsersRepository>();
         }
 
-        [Test]
-        public async Task Get_1_NewTournament()
-        {
-            //Arrange
-            _tournamentRepositoryMock.Setup(r => r.Get(1)).ReturnsAsync(_tournament);
-            _tournamentController = new TournamentController(_tournamentRepositoryMock.Object, _tournamentsUsersRepositoryMock.Object, _exerciseRepositoryMock.Object);
+        // [Test]
+        // public async Task Get_1_NewTournament()
+        // {
+        //     //Arrange
+        //     _tournamentRepositoryMock.Setup(r => r.Get(1)).ReturnsAsync(_tournament);
+        //     _tournamentController = new TournamentController(_tournamentRepositoryMock.Object, _tournamentsUsersRepositoryMock.Object, _exerciseRepositoryMock.Object);
 
-            //Act
-            var tournament = await _tournamentController.Get(1);
+        //     //Act
+        //     var tournament = await _tournamentController.Get(1);
 
-            //Assert
-            Assert.NotNull(tournament.Value);
-            Assert.AreEqual("New Tournament", tournament.Value.Caption);
-        }
+        //     //Assert
+        //     Assert.NotNull(tournament.Value);
+        //     Assert.AreEqual("New Tournament", tournament.Value.Caption);
+        // }
 
-        [Test]
-        public void Get_10_ArgumentException()
-        {
-            //Arrange
-            _tournamentRepositoryMock.Setup(r => r.Get(1)).ReturnsAsync(_tournament);
-            _tournamentController = new TournamentController(_tournamentRepositoryMock.Object, _tournamentsUsersRepositoryMock.Object, _exerciseRepositoryMock.Object);
+        // [Test]
+        // public void Get_10_ArgumentException()
+        // {
+        //     //Arrange
+        //     _tournamentRepositoryMock.Setup(r => r.Get(1)).ReturnsAsync(_tournament);
+        //     _tournamentController = new TournamentController(_tournamentRepositoryMock.Object, _tournamentsUsersRepositoryMock.Object, _exerciseRepositoryMock.Object);
 
-            //Assert
-            Assert.ThrowsAsync<ArgumentException>(() => _tournamentController.Get(10), "Can't find tournament with given id");
-        }
+        //     //Assert
+        //     Assert.ThrowsAsync<ArgumentException>(() => _tournamentController.Get(10), "Can't find tournament with given id");
+        // }
 
-        [Test]
-        public async Task GetAll_NewTournament()
-        {
-            //Arrange
-            _tournamentRepositoryMock.Setup(r => r.GetAll()).ReturnsAsync(_tournaments);
-            _tournamentController = new TournamentController(_tournamentRepositoryMock.Object, _tournamentsUsersRepositoryMock.Object, _exerciseRepositoryMock.Object);
+        // [Test]
+        // public async Task GetAll_NewTournament()
+        // {
+        //     //Arrange
+        //     _tournamentRepositoryMock.Setup(r => r.GetAll()).ReturnsAsync(_tournaments);
+        //     _tournamentController = new TournamentController(_tournamentRepositoryMock.Object, _tournamentsUsersRepositoryMock.Object, _exerciseRepositoryMock.Object);
 
-            //Act
-            var tournaments = await _tournamentController.GetAll();
+        //     //Act
+        //     var tournaments = await _tournamentController.GetAll();
 
-            //Assert
-            Assert.NotNull(tournaments);
-            Assert.Contains("New Tournament", tournaments.Value.Select(t => t.Caption).ToList());
-        }
+        //     //Assert
+        //     Assert.NotNull(tournaments);
+        //     Assert.Contains("New Tournament", tournaments.Value.Select(t => t.Caption).ToList());
+        // }
 
-        [Test]
-        public async Task GetAvailable_datetimeNow_NewTournament()
-        {
-            //Arrange
-            var date = DateTime.Now;
-            _tournamentRepositoryMock.Setup(r => r.GetAvailable(date))
-                .ReturnsAsync(_tournaments.Where(t => DateTime.Compare(t.EndDate, date) > 0).ToList());
-            _tournamentController = new TournamentController(_tournamentRepositoryMock.Object, _tournamentsUsersRepositoryMock.Object, _exerciseRepositoryMock.Object);
+        // [Test]
+        // public async Task GetAvailable_datetimeNow_NewTournament()
+        // {
+        //     //Arrange
+        //     var date = DateTime.Now;
+        //     _tournamentRepositoryMock.Setup(r => r.GetAvailable(date))
+        //         .ReturnsAsync(_tournaments.Where(t => DateTime.Compare(t.EndDate, date) > 0).ToList());
+        //     _tournamentController = new TournamentController(_tournamentRepositoryMock.Object, _tournamentsUsersRepositoryMock.Object, _exerciseRepositoryMock.Object);
 
-            //Act
-            var tournaments = await _tournamentController.GetAvailable(date);
+        //     //Act
+        //     var tournaments = await _tournamentController.GetAvailable(date);
 
-            //Assert
-            Assert.NotNull(tournaments);
-            Assert.Contains("New Tournament", tournaments.Value.Select(t => t.Caption).ToList());
-            Assert.Null(tournaments.Value.FirstOrDefault(t => t.Caption == "Absolute New Tournament"));
-        }
+        //     //Assert
+        //     Assert.NotNull(tournaments);
+        //     Assert.Contains("New Tournament", tournaments.Value.Select(t => t.Caption).ToList());
+        //     Assert.Null(tournaments.Value.FirstOrDefault(t => t.Caption == "Absolute New Tournament"));
+        // }
 
-        [Test]
-        public async Task GetAvailable_datetimeNow_NotFound()
-        {
-            //Arrange
-            var date = DateTime.Now;
-            _tournamentRepositoryMock.Setup(r => r.GetAvailable(date));
-            _tournamentController = new TournamentController(_tournamentRepositoryMock.Object, _tournamentsUsersRepositoryMock.Object, _exerciseRepositoryMock.Object);
+        // [Test]
+        // public async Task GetAvailable_datetimeNow_NotFound()
+        // {
+        //     //Arrange
+        //     var date = DateTime.Now;
+        //     _tournamentRepositoryMock.Setup(r => r.GetAvailable(date));
+        //     _tournamentController = new TournamentController(_tournamentRepositoryMock.Object, _tournamentsUsersRepositoryMock.Object, _exerciseRepositoryMock.Object);
 
-            //Act
-            var response = await _tournamentController.GetAvailable(date);
+        //     //Act
+        //     var response = await _tournamentController.GetAvailable(date);
 
-            //Assert
-            Assert.IsNotNull(response);
-            Assert.AreEqual(response.Result.GetType(), typeof(Microsoft.AspNetCore.Mvc.NotFoundResult));
-        }
+        //     //Assert
+        //     Assert.IsNotNull(response);
+        //     Assert.AreEqual(response.Result.GetType(), typeof(Microsoft.AspNetCore.Mvc.NotFoundResult));
+        // }
     }
 }
