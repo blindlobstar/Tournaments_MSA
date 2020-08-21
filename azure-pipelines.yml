@@ -24,6 +24,6 @@ stages:
       displayName: Build an image
       inputs:
         command: build
-        dockerfile: '$(Build.Repository.LocalPath)'
+        dockerfile: '$(Build.Repository.LocalPath)/TournamentService.API/Dockerfile'
         tags: |
           $(tag)
