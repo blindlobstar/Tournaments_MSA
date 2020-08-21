@@ -21,7 +21,6 @@ RUN dotnet publish -c Release -o /app
 
 FROM build as test
 WORKDIR /src/TournamentService.Test
-RUN dotnet test
 
 FROM base as final
 WORKDIR /app

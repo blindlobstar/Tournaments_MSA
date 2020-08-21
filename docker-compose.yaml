@@ -25,7 +25,7 @@ services:
     tournament-api:
         build: 
             context: .
-            dockerfile: TournamentService.API/Dockerfile
+            dockerfile: 'TournamentService.API/Dockerfile'
         ports: 
             - "5001:80"
         depends_on: 
