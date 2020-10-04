@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    hostname: rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672
+
+  sqldata:
+    image: "mcr.microsoft.com/mssql/server:2017-latest-ubuntu"
+    environment:
+      SA_PASSWORD: "PaSSword123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - 1433:1433
+
+  tournamentservice.api:
+    image: ${DOCKER_REGISTRY-}tournamentserviceapi
+    build:
+      context: .
+      dockerfile: TournamentService.API/Dockerfile
+    depends_on:
+      - sqldata
+      - rabbitmq

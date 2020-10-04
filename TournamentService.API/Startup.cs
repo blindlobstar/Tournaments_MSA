@@ -1,11 +1,11 @@
 using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.Handlers;
-using Common.Data.EFCore;
 using Common.EventBus.RabbitMq;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -39,8 +39,12 @@ namespace TournamentService.API
             });
 
             services.AddRabbitMq();
-            services.AddEfCore();
-            services.AddDbContext<TournamentContext>();
+
+            services.AddDbContext<TournamentContext>(option => option
+                .UseSqlServer(Configuration.GetConnectionString("Default"),
+                        x => x.MigrationsAssembly("TournamentService.Data")),
+                    optionsLifetime: ServiceLifetime.Singleton,
+                    contextLifetime: ServiceLifetime.Transient);
 
             // Add Hangfire services.
             services.AddHangfire(configuration => configuration
@@ -69,7 +73,7 @@ namespace TournamentService.API
             services.AddTransient<ICommandHandler<AddTournament>, AddTournamentHandler>();
             services.AddTransient<ICommandHandler<UpdateTournament>, UpdateTournamentHandler>();
             services.AddTransient<ICommandHandler<RegisterUser>, RegisterUserHandler>();
-            
+
             services.AddTransient<CalculateTournamentResult>();
         }
 
@@ -91,6 +95,8 @@ namespace TournamentService.API
             {
                 endpoints.MapControllers();
             });
+            //Ensure that database created
+            app.ApplicationServices.GetService<TournamentContext>().Database.EnsureCreated();
 
             app.UseRabbitMq()
                 .SubscribeCommand<AddTournament>()
