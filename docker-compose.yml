@@ -20,7 +20,7 @@ services:
     image: ${DOCKER_REGISTRY-}tournamentserviceapi
     build:
       context: .
-      dockerfile: TournamentService/TournamentService.API/Dockerfile
+      dockerfile: Services/TournamentService/TournamentService.API/Dockerfile
     depends_on:
       - sqldata
       - rabbitmq
