@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common.Contracts\Common.Contracts.csproj" />
-    <ProjectReference Include="..\Common.Core\Common.Core.csproj" />
-    <ProjectReference Include="..\Common.EventBus.RabbitMq\Common.EventBus.RabbitMq.csproj" />
+    <ProjectReference Include="..\..\..\Common\Contracts\Common.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Common\Core\Common.Core.csproj" />
+    <ProjectReference Include="..\..\..\Common\EventBus.RabbitMq\Common.EventBus.RabbitMq.csproj" />
     <ProjectReference Include="..\UserService.Core\UserService.Core.csproj" />
     <ProjectReference Include="..\UserService.Data\UserService.Data.csproj" />
   </ItemGroup>

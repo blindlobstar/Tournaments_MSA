@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common.Contracts\Common.Contracts.csproj" />
-    <ProjectReference Include="..\Common.EventBus.RabbitMq\Common.EventBus.RabbitMq.csproj" />
+    <ProjectReference Include="..\..\..\Common\Contracts\Common.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Common\EventBus.RabbitMq\Common.EventBus.RabbitMq.csproj" />
     <ProjectReference Include="..\TournamentService.Core\TournamentService.Core.csproj" />
     <ProjectReference Include="..\TournamentService.Data\TournamentService.Data.csproj" />
   </ItemGroup>

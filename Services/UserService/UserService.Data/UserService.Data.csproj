@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common.Core\Common.Core.csproj" />
-    <ProjectReference Include="..\Common.Data.MongoDB\Common.Data.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\Common\Core\Common.Core.csproj" />
+    <ProjectReference Include="..\..\..\Common\Data.MongoDB\Common.Data.MongoDB.csproj" />
     <ProjectReference Include="..\UserService.Core\UserService.Core.csproj" />
   </ItemGroup>
 
