@@ -1,51 +1,61 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C236A556-6E35-4862-88C1-47EA0D4365B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Contracts", "Common\Contracts\Common.Contracts.csproj", "{2AE08A0C-3483-4B41-9E12-D8D5405197FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Contracts", "Common\Contracts\Common.Contracts.csproj", "{2AE08A0C-3483-4B41-9E12-D8D5405197FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Core", "Common\Core\Common.Core.csproj", "{B34C4EB6-BED1-40D9-8001-409D1A12C674}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Core", "Common\Core\Common.Core.csproj", "{B34C4EB6-BED1-40D9-8001-409D1A12C674}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Data.EFCore", "Common\Data.EFCore\Common.Data.EFCore.csproj", "{A9AC79E2-8383-4F1E-AA9A-FB66105AE6D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Data.EFCore", "Common\Data.EFCore\Common.Data.EFCore.csproj", "{A9AC79E2-8383-4F1E-AA9A-FB66105AE6D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Data.MongoDB", "Common\Data.MongoDB\Common.Data.MongoDB.csproj", "{FC0375C2-327E-4D71-8B34-3877FB7D5B0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Data.MongoDB", "Common\Data.MongoDB\Common.Data.MongoDB.csproj", "{FC0375C2-327E-4D71-8B34-3877FB7D5B0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.EventBus.RabbitMq", "Common\EventBus.RabbitMq\Common.EventBus.RabbitMq.csproj", "{8794AA96-8377-43EA-AC67-17B9EFBA7360}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.EventBus.RabbitMq", "Common\EventBus.RabbitMq\Common.EventBus.RabbitMq.csproj", "{8794AA96-8377-43EA-AC67-17B9EFBA7360}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Logic", "Common\Logic\Common.Logic.csproj", "{1F1E4AE0-C937-479E-B879-AC0F7B050FE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Logic", "Common\Logic\Common.Logic.csproj", "{1F1E4AE0-C937-479E-B879-AC0F7B050FE2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{559389AF-A3A4-49A9-A0B1-5128C35D43FD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", "{05E621C4-7103-43AE-9F53-7B531139FE33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleApiGateway", "Services\ApiGateway\SimpleApiGateway\SimpleApiGateway.csproj", "{FB86B884-2D20-4707-843D-DCD4716B9181}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleApiGateway", "Services\ApiGateway\SimpleApiGateway\SimpleApiGateway.csproj", "{FB86B884-2D20-4707-843D-DCD4716B9181}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityService", "IdentityService", "{45502854-DE04-4DF9-A759-232B00FE88C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService.API", "Services\IdentityService\IdentityService.API\IdentityService.API.csproj", "{0F77D87F-80B5-4C53-9B23-9CC9DDDE0132}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService.API", "Services\IdentityService\IdentityService.API\IdentityService.API.csproj", "{0F77D87F-80B5-4C53-9B23-9CC9DDDE0132}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TournamentService", "TournamentService", "{4BAA06A9-8D56-433B-B33C-A29A787736BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentService.API", "Services\TournamentService\TournamentService.API\TournamentService.API.csproj", "{9FFC3A29-5D7A-435B-9008-2401363DE357}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TournamentService.API", "Services\TournamentService\TournamentService.API\TournamentService.API.csproj", "{9FFC3A29-5D7A-435B-9008-2401363DE357}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentService.Core", "Services\TournamentService\TournamentService.Core\TournamentService.Core.csproj", "{D9D317E7-16DC-47D6-AB6B-E8EB64E662A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TournamentService.Core", "Services\TournamentService\TournamentService.Core\TournamentService.Core.csproj", "{D9D317E7-16DC-47D6-AB6B-E8EB64E662A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentService.Data", "Services\TournamentService\TournamentService.Data\TournamentService.Data.csproj", "{5F38F06B-64EB-4BA8-8AF6-99A8FD9EA733}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TournamentService.Data", "Services\TournamentService\TournamentService.Data\TournamentService.Data.csproj", "{5F38F06B-64EB-4BA8-8AF6-99A8FD9EA733}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentService.Test", "Services\TournamentService\TournamentService.Test\TournamentService.Test.csproj", "{7F1081C7-5979-41F6-A2C4-F5B11485EFD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TournamentService.Test", "Services\TournamentService\TournamentService.Test\TournamentService.Test.csproj", "{7F1081C7-5979-41F6-A2C4-F5B11485EFD5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserService", "UserService", "{6611720C-9438-4F76-9C0B-CE27A3B74050}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.API", "Services\UserService\UserService.API\UserService.API.csproj", "{20C5DF5A-8462-4FDF-AE02-23C3E251A1C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.API", "Services\UserService\UserService.API\UserService.API.csproj", "{20C5DF5A-8462-4FDF-AE02-23C3E251A1C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Core", "Services\UserService\UserService.Core\UserService.Core.csproj", "{BC83C253-286D-4891-BBA3-C91D3DAFB313}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Core", "Services\UserService\UserService.Core\UserService.Core.csproj", "{BC83C253-286D-4891-BBA3-C91D3DAFB313}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Data", "Services\UserService\UserService.Data\UserService.Data.csproj", "{4F30D051-2BFE-4124-B0F8-7E992A9CC082}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Data", "Services\UserService\UserService.Data\UserService.Data.csproj", "{4F30D051-2BFE-4124-B0F8-7E992A9CC082}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Test", "Services\UserService\UserService.Test\UserService.Test.csproj", "{E95030A0-4E35-4657-99AA-67C958F8678B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Test", "Services\UserService\UserService.Test\UserService.Test.csproj", "{E95030A0-4E35-4657-99AA-67C958F8678B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelayedPR", "Common\DelayedPR\DelayedPR.csproj", "{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0DC0B40F-D6F2-43E4-9985-6704B6A1B987}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit", "Unit", "{ED52A001-C76F-4EE8-A469-2E0639C58B90}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelayedPR.Tests", "Tests\Unit\DelayedPR.Tests\DelayedPR.Tests.csproj", "{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedCache.CustomExtensions", "Common\DistributedCache.CustomExtensions\DistributedCache.CustomExtensions.csproj", "{5AC13E62-090E-4E42-958A-C34904276B77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,9 +65,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2AE08A0C-3483-4B41-9E12-D8D5405197FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -252,6 +259,45 @@ Global
 		{E95030A0-4E35-4657-99AA-67C958F8678B}.Release|x64.Build.0 = Release|Any CPU
 		{E95030A0-4E35-4657-99AA-67C958F8678B}.Release|x86.ActiveCfg = Release|Any CPU
 		{E95030A0-4E35-4657-99AA-67C958F8678B}.Release|x86.Build.0 = Release|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Debug|x64.Build.0 = Debug|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Debug|x86.Build.0 = Debug|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Release|x64.ActiveCfg = Release|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Release|x64.Build.0 = Release|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Release|x86.ActiveCfg = Release|Any CPU
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95}.Release|x86.Build.0 = Release|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Debug|x64.Build.0 = Debug|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Debug|x86.Build.0 = Debug|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Release|x64.ActiveCfg = Release|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Release|x64.Build.0 = Release|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Release|x86.ActiveCfg = Release|Any CPU
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}.Release|x86.Build.0 = Release|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Debug|x64.Build.0 = Debug|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Debug|x86.Build.0 = Debug|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Release|x64.ActiveCfg = Release|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Release|x64.Build.0 = Release|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Release|x86.ActiveCfg = Release|Any CPU
+		{5AC13E62-090E-4E42-958A-C34904276B77}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2AE08A0C-3483-4B41-9E12-D8D5405197FB} = {C236A556-6E35-4862-88C1-47EA0D4365B5}
@@ -274,5 +320,12 @@ Global
 		{BC83C253-286D-4891-BBA3-C91D3DAFB313} = {6611720C-9438-4F76-9C0B-CE27A3B74050}
 		{4F30D051-2BFE-4124-B0F8-7E992A9CC082} = {6611720C-9438-4F76-9C0B-CE27A3B74050}
 		{E95030A0-4E35-4657-99AA-67C958F8678B} = {6611720C-9438-4F76-9C0B-CE27A3B74050}
+		{5FEE5D29-5CA3-4847-94BA-61B8C184EB95} = {C236A556-6E35-4862-88C1-47EA0D4365B5}
+		{ED52A001-C76F-4EE8-A469-2E0639C58B90} = {0DC0B40F-D6F2-43E4-9985-6704B6A1B987}
+		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1} = {ED52A001-C76F-4EE8-A469-2E0639C58B90}
+		{5AC13E62-090E-4E42-958A-C34904276B77} = {C236A556-6E35-4862-88C1-47EA0D4365B5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7CD195B7-45B0-4AD0-9C11-6D8B2AE6C6F1}
 	EndGlobalSection
 EndGlobal
