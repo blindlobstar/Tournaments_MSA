@@ -42,7 +42,7 @@ namespace Common.DelayedPR.Server
                     if (procedure.RunAt > DateTime.UtcNow)
                         continue;
 
-                    _logger.LogInformation($"Start executing { procedure.ClassName }.{ procedure.MethodName }");
+                    _logger.LogInformation($"Start executing {procedure.ClassName}.{procedure.MethodName}");
                     try
                     {
                         var classType = Assembly.Load(procedure.AssemblyName).GetType(procedure.ClassName);
@@ -58,22 +58,22 @@ namespace Common.DelayedPR.Server
                         }
                         catch (Exception e)
                         {
-                            _logger.LogError($"Error accure when tring to invoke method: { procedure.ClassName }.{ procedure.MethodName }", e);
+                            _logger.LogError($"Error accure when tring to invoke method: {procedure.ClassName}.{procedure.MethodName}", e);
                         }
                         await _distributedCache.RemoveAsync(key);
                     } 
                     catch(MissingMethodException ex)
                     {
-                        _logger.LogError(ex.Message, ex);
+                        _logger.LogError($"Error accured while calling method {procedure.ClassName}.{procedure.MethodName}", ex);
                     }
                     catch(ArgumentOutOfRangeException argEx)
                     {
-                        _logger.LogError(argEx.Message, argEx);
+                        _logger.LogError($"Error accured while calling method {procedure.ClassName}.{procedure.MethodName}", argEx);
                     }
                     
                 }
 
-                await Task.Delay(TimeSpan.FromMilliseconds(10), cancellationToken);
+                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }
         }
 
@@ -87,7 +87,7 @@ namespace Common.DelayedPR.Server
                 TypeCode.Boolean => bool.Parse(value),
                 TypeCode.DateTime => DateTime.Parse(value),
                 TypeCode.String => value,
-                _ => throw new ArgumentOutOfRangeException("Wrong argument type ")
+                _ => throw new ArgumentOutOfRangeException($"Wrong argument type {type.Name}")
             };
     }
 }
