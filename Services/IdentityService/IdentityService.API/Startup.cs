@@ -3,6 +3,7 @@ using Common.Data.MongoDB.Models;
 using Common.EventBus.RabbitMq;
 using Common.Logic.Auth;
 using IdentityService.API.Data;
+using IdentityService.API.Domain;
 using IdentityService.API.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +35,7 @@ namespace IdentityService.API
             services.AddRabbitMq();
             services.AddMongoDb();
 
-            services.AddScoped<UserContext>();
+            services.AddScoped<IBaseContext<User>, UserContext>();
 
             services.AddScoped<IUserRepository, UserRepository>();
         }

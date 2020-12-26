@@ -96,7 +96,8 @@ namespace TournamentService.API
                 endpoints.MapControllers();
             });
             //Ensure that database created
-            app.ApplicationServices.GetService<TournamentContext>().Database.EnsureCreated();
+            using var scope = app.ApplicationServices.CreateScope();
+            scope.ServiceProvider.GetService<TournamentContext>().Database.EnsureCreated();
 
             app.UseRabbitMq()
                 .SubscribeCommand<AddTournament>()

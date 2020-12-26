@@ -27,7 +27,9 @@ namespace Common.EventBus.RabbitMq
                 return RabbitHutch.CreateBus(options.ConnectionString);
             });
 
-            services.AddSingleton<IBusPublisher, BusPublisher>();
+            services.AddTransient<IBusPublisher, BusPublisher>();
+
+            services.AddSingleton<IBusSubscriber, BusSubscriber>();
         }
     }
 }

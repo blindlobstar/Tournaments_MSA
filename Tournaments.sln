@@ -55,7 +55,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit", "Unit", "{ED52A001-C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelayedPR.Tests", "Tests\Unit\DelayedPR.Tests\DelayedPR.Tests.csproj", "{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedCache.CustomExtensions", "Common\DistributedCache.CustomExtensions\DistributedCache.CustomExtensions.csproj", "{5AC13E62-090E-4E42-958A-C34904276B77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DistributedCache.CustomExtensions", "Common\DistributedCache.CustomExtensions\DistributedCache.CustomExtensions.csproj", "{5AC13E62-090E-4E42-958A-C34904276B77}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{60DE488F-B955-4886-939C-4B16F603DCCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -295,6 +297,18 @@ Global
 		{5AC13E62-090E-4E42-958A-C34904276B77}.Release|x64.Build.0 = Release|Any CPU
 		{5AC13E62-090E-4E42-958A-C34904276B77}.Release|x86.ActiveCfg = Release|Any CPU
 		{5AC13E62-090E-4E42-958A-C34904276B77}.Release|x86.Build.0 = Release|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Debug|x64.Build.0 = Debug|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Debug|x86.Build.0 = Debug|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Release|x64.ActiveCfg = Release|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Release|x64.Build.0 = Release|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Release|x86.ActiveCfg = Release|Any CPU
+		{60DE488F-B955-4886-939C-4B16F603DCCF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

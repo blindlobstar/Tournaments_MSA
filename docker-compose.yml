@@ -1,20 +1,44 @@
 version: '3.4'
 
 services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+  
+  mongodb:
+    image: mongo
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    hostname: rabbitmq
-    ports:
-        - 5672:5672
-        - 15672:15672
 
-  sqldata:
-    image: "mcr.microsoft.com/mssql/server:2017-latest-ubuntu"
-    environment:
-      SA_PASSWORD: "PaSSword123"
-      ACCEPT_EULA: "Y"
-    ports:
-      - 1433:1433
+  identityservice.api:
+    image: ${DOCKER_REGISTRY-}identityserviceapi
+    build:
+      context: .
+      dockerfile: Services/IdentityService/IdentityService.API/Dockerfile
+    depends_on:
+      - rabbitmq
+      - mongodb
+
+
+  simpleapigateway:
+    image: ${DOCKER_REGISTRY-}simpleapigateway
+    build:
+      context: .
+      dockerfile: Services/ApiGateway/SimpleApiGateway/Dockerfile
+    depends_on:
+      - rabbitmq
+      - identityservice.api
+
+
+  userservice.api:
+    image: ${DOCKER_REGISTRY-}userserviceapi
+    build:
+      context: .
+      dockerfile: Services/UserService/UserService.API/Dockerfile
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - simpleapigateway
 
   tournamentservice.api:
     image: ${DOCKER_REGISTRY-}tournamentserviceapi
@@ -22,5 +46,7 @@ services:
       context: .
       dockerfile: Services/TournamentService/TournamentService.API/Dockerfile
     depends_on:
-      - sqldata
+      - mssql
       - rabbitmq
+      - simpleapigateway
+      - userservice.api

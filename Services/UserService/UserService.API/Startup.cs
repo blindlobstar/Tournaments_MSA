@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using UserService.API.Handlers;
 using UserService.Core.Data;
+using UserService.Core.Models;
 using UserService.Data;
 using UserService.Data.Repositories;
 
@@ -38,7 +39,7 @@ namespace UserService.API
             services.AddMongoDb();
             services.AddRabbitMq();
 
-            services.AddScoped<UserContext>();
+            services.AddScoped<IBaseContext<User>, UserContext>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             //Inject handlers

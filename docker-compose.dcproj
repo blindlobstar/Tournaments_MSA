@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>7c35eecc-0024-4163-8cef-ef0f579aaa06</ProjectGuid>
+    <ProjectGuid>60de488f-b955-4886-939c-4b16f603dccf</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
     <DockerServiceName>tournamentservice.api</DockerServiceName>
