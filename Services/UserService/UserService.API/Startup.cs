@@ -2,7 +2,6 @@ using Common.Contracts.IdentityService.Events;
 using Common.Contracts.UserService.Commands;
 using Common.Core.DataExchange.Handlers;
 using Common.Data.MongoDB;
-using Common.Data.MongoDB.Models;
 using Common.EventBus.RabbitMq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,12 +38,8 @@ namespace UserService.API
             services.AddMongoDb();
             services.AddRabbitMq();
 
-            services.AddTransient<IUserRepository, UserRepository>(implementationFactory =>
-            {
-                var options = implementationFactory.GetRequiredService<IDatabaseSettings>();
-                var context = new UserContext(options);
-                return new UserRepository(context);
-            });
+            services.AddScoped<UserContext>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             //Inject handlers
             services.AddTransient<IEventHandler<UserAdded>, UserAddedHandler>();

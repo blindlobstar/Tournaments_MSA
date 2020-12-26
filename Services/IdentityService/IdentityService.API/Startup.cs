@@ -34,12 +34,9 @@ namespace IdentityService.API
             services.AddRabbitMq();
             services.AddMongoDb();
 
-            services.AddTransient<IUserRepository, UserRepository>(implementationFactory =>
-            {
-                var options = implementationFactory.GetRequiredService<IDatabaseSettings>();
-                var context = new UserContext(options);
-                return new UserRepository(context);
-            });
+            services.AddScoped<UserContext>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
 

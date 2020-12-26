@@ -1,26 +1,27 @@
 ﻿using Common.Core.DataExchange.EventBus;
 using Common.Core.DataExchange.Messages;
-using Microsoft.AspNetCore.Builder;
 using EasyNetQ;
 using Common.Core.DataExchange.Handlers;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using IMessage = Common.Core.DataExchange.Messages.IMessage;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Common.EventBus.RabbitMq
 {
     public class BusSubscriber : IBusSubscriber
     {
-        private readonly IApplicationBuilder _app;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IBus _busClient;
         private readonly ILogger<IMessage> _logger;
 
-        public BusSubscriber(IApplicationBuilder app, IBus busClient,
-            ILogger<IMessage> logger)
+        public BusSubscriber(IBus busClient,
+            ILogger<IMessage> logger, 
+            IServiceScopeFactory serviceScopeFactory)
         {
             _busClient = busClient;
-            _app = app;
             _logger = logger;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public IBusSubscriber SubscribeCommand<TCommand>() where TCommand : class, ICommand
@@ -28,7 +29,8 @@ namespace Common.EventBus.RabbitMq
             _logger.LogInformation($"Service: {Assembly.GetCallingAssembly().GetName().Name} has subscribed to command: {typeof(TCommand).FullName}");
             _busClient.SubscribeAsync<TCommand>(string.Empty, async (command) =>
             {
-                var handler = (ICommandHandler<TCommand>)_app.ApplicationServices.GetService(typeof(ICommandHandler<TCommand>));
+                using var scope = _serviceScopeFactory.CreateScope();
+                var handler = (ICommandHandler<TCommand>)scope.ServiceProvider.GetService(typeof(ICommandHandler<TCommand>));
                 await handler.HandleAsync(command);
             });
             return this;
@@ -39,7 +41,8 @@ namespace Common.EventBus.RabbitMq
             _logger.LogInformation($"Service: {Assembly.GetCallingAssembly().GetName().Name} has subscribed to event: {typeof(TEvent).FullName}");
             _busClient.SubscribeAsync<TEvent>(string.Empty, async (@event) =>
             {
-                var handler = (IEventHandler<TEvent>)_app.ApplicationServices.GetService(typeof(IEventHandler<TEvent>));
+                using var scope = _serviceScopeFactory.CreateScope();
+                var handler = (IEventHandler<TEvent>)scope.ServiceProvider.GetService(typeof(IEventHandler<TEvent>));
                 await handler.HandleAsync(@event);
             });
             return this;

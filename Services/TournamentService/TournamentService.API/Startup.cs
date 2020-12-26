@@ -44,7 +44,7 @@ namespace TournamentService.API
                 .UseSqlServer(Configuration.GetConnectionString("Default"),
                         x => x.MigrationsAssembly("TournamentService.Data")),
                     optionsLifetime: ServiceLifetime.Singleton,
-                    contextLifetime: ServiceLifetime.Transient);
+                    contextLifetime: ServiceLifetime.Scoped);
 
             // Add Hangfire services.
             services.AddHangfire(configuration => configuration
@@ -64,15 +64,15 @@ namespace TournamentService.API
             services.AddHangfireServer();
 
             //Inject repositories
-            services.AddTransient<ITournamentRepository, TournamentRepository>();
-            services.AddTransient<ITournamentsUsersRepository, TournamentsUsersRepository>();
-            services.AddTransient<IExerciseRepository, ExerciseRepository>();
-            services.AddTransient<IExercisesUsersRepository, ExercisesUsersRepository>();
+            services.AddScoped<ITournamentRepository, TournamentRepository>();
+            services.AddScoped<ITournamentsUsersRepository, TournamentsUsersRepository>();
+            services.AddScoped<IExerciseRepository, ExerciseRepository>();
+            services.AddScoped<IExercisesUsersRepository, ExercisesUsersRepository>();
 
             //Inject handlers
-            services.AddTransient<ICommandHandler<AddTournament>, AddTournamentHandler>();
-            services.AddTransient<ICommandHandler<UpdateTournament>, UpdateTournamentHandler>();
-            services.AddTransient<ICommandHandler<RegisterUser>, RegisterUserHandler>();
+            services.AddScoped<ICommandHandler<AddTournament>, AddTournamentHandler>();
+            services.AddScoped<ICommandHandler<UpdateTournament>, UpdateTournamentHandler>();
+            services.AddScoped<ICommandHandler<RegisterUser>, RegisterUserHandler>();
 
             services.AddTransient<CalculateTournamentResult>();
         }

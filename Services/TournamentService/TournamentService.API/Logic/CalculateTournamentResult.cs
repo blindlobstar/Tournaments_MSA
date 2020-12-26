@@ -1,6 +1,4 @@
-﻿using Common.Contracts.TournamentService.Events;
-using Common.Core.DataExchange.EventBus;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,14 +7,6 @@ using TournamentService.Core.Models;
 
 namespace TournamentService.API.Logic
 {
-    public class UserWhoAnswered
-    {
-        public string UserId { get; set; }
-        public int CorrectCount { get; set; }
-        public double TimeDiff { get; set; }
-        public TournamentsUsers TournamentsUsers { get; set; }
-    }
-
     public class CalculateTournamentResult
     {
         private readonly IExercisesUsersRepository _exercisesUsersRepository;
@@ -60,7 +50,7 @@ namespace TournamentService.API.Logic
                          group userScore by userScore.UserId into groupUserScore
                          join ut in tournamentsUsers
                          on groupUserScore.Key equals ut.UserId
-                         select new UserWhoAnswered()
+                         select new
                          {
                              CorrectCount = groupUserScore.Count(),
                              UserId = groupUserScore.Key,
