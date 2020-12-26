@@ -3,9 +3,10 @@
 namespace IdentityService.API.Controllers
 {
     [ApiController]
-    [Route("/")]
+    [Route("Home")]
     public class HomeController : ControllerBase
     {
+        [HttpGet]
         public string Get()
             => "Identity service is working";
     }

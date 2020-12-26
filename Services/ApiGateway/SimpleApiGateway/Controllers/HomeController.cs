@@ -2,10 +2,11 @@
 
 namespace SimpleApiGateway.Controllers
 {
-    //[Route("/")]
-    //[ApiController]
-    public class HomeController /*: ControllerBase*/
+    [Route("Home")]
+    [ApiController]
+    public class HomeController : ControllerBase
     {
+        [HttpGet]
         public string Get() =>
             "Service is working";
     }

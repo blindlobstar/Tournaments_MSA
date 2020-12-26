@@ -38,6 +38,8 @@ namespace IdentityService.API
             services.AddScoped<IBaseContext<User>, UserContext>();
 
             services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddSwaggerGen();
         }
 
 
@@ -47,6 +49,13 @@ namespace IdentityService.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 
