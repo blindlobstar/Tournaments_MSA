@@ -3,6 +3,9 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <LangVersion>preview</LangVersion>
+        <UserSecretsId>5f526495-63e5-4428-944b-7a18fbfd03ea</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..\..</DockerfileContext>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,6 +18,7 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.8" />
+      <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
       <PackageReference Include="MongoDB.Driver" Version="2.11.2" />
     </ItemGroup>
 

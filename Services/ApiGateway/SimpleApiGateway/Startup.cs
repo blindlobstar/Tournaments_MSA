@@ -28,9 +28,8 @@ namespace SimpleApiGateway
             var jwtOptions = new JwtOptions();
             Configuration.GetSection("JwtOptions").Bind(jwtOptions);
             services.ConfigureJwtAuth(jwtOptions);
-            
-            //DI
-            services.AddTransient<IBusPublisher, BusPublisher>();
+
+            services.AddSwaggerGen();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -39,6 +38,12 @@ namespace SimpleApiGateway
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseRouting();
 

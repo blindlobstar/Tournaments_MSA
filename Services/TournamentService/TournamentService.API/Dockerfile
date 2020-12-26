@@ -1,22 +1,22 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["TournamentService.API/TournamentService.API.csproj", "TournamentService.API/"]
-COPY ["TournamentService.Data/TournamentService.Data.csproj", "TournamentService.Data/"]
-COPY ["TournamentService.Core/TournamentService.Core.csproj", "TournamentService.Core/"]
-COPY ["Common.Data.EFCore/Common.Data.EFCore.csproj", "Common.Data.EFCore/"]
-COPY ["Common.Core/Common.Core.csproj", "Common.Core/"]
-COPY ["Common.EventBus.RabbitMq/Common.EventBus.RabbitMq.csproj", "Common.EventBus.RabbitMq/"]
-COPY ["Common.Contracts/Common.Contracts.csproj", "Common.Contracts/"]
-RUN dotnet restore "TournamentService.API/TournamentService.API.csproj"
+COPY ["Services/TournamentService/TournamentService.API/TournamentService.API.csproj", "Services/TournamentService/TournamentService.API/"]
+COPY ["Common/Contracts/Common.Contracts.csproj", "Common/Contracts/"]
+COPY ["Common/Core/Common.Core.csproj", "Common/Core/"]
+COPY ["Services/TournamentService/TournamentService.Data/TournamentService.Data.csproj", "Services/TournamentService/TournamentService.Data/"]
+COPY ["Services/TournamentService/TournamentService.Core/TournamentService.Core.csproj", "Services/TournamentService/TournamentService.Core/"]
+COPY ["Common/Data.EFCore/Common.Data.EFCore.csproj", "Common/Data.EFCore/"]
+COPY ["Common/EventBus.RabbitMq/Common.EventBus.RabbitMq.csproj", "Common/EventBus.RabbitMq/"]
+RUN dotnet restore "Services/TournamentService/TournamentService.API/TournamentService.API.csproj"
 COPY . .
-WORKDIR "/src/TournamentService.API"
+WORKDIR "/src/Services/TournamentService/TournamentService.API"
 RUN dotnet build "TournamentService.API.csproj" -c Release -o /app/build
 
 FROM build AS publish

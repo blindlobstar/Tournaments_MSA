@@ -3,7 +3,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Common.Contracts.UserService.Commands;
-using Common.Core.Auth;
 using Common.Core.DataExchange.EventBus;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
