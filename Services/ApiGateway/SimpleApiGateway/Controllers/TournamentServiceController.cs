@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.EventBus;
 using Microsoft.AspNetCore.Authorization;
@@ -40,8 +43,18 @@ namespace SimpleApiGateway.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [Route("registrate")]
-        public async Task<IActionResult> Registrate(RegisterUser user)
+        public async Task<IActionResult> Registrate(int tournamentId)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claim = identity.Claims;
+            var userId = claim.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+
+            var user = new RegisterUser()
+            {
+                TournamentId = tournamentId,
+                UserId = userId
+            };
+
             await _busPublisher.Send(user);
             return Ok();
         }
