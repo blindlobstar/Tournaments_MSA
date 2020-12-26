@@ -17,6 +17,7 @@ namespace SimpleApiGateway.Controllers
             _busPublisher = busPublisher;
         }
 
+        [HttpGet]
         public string Get() =>
             "TournamentService is working";
 
