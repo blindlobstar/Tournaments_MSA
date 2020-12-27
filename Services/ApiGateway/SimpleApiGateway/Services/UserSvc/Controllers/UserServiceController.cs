@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleApiGateway.Requests;
 using SimpleApiGateway.Utils;
+using static GrpcUserService.UserService;
 
 namespace SimpleApiGateway.Services.UserSvc.Controllers
 {
@@ -13,11 +14,28 @@ namespace SimpleApiGateway.Services.UserSvc.Controllers
     public class UserController : ControllerBase
     {
         private readonly IBusPublisher _busPublisher;
+        private readonly UserServiceClient _userServiceClient;
 
-        public UserController(IBusPublisher busPublisher)
+        public UserController(IBusPublisher busPublisher, 
+            UserServiceClient userServiceClient)
         {
             _busPublisher = busPublisher;
+            _userServiceClient = userServiceClient;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Get() =>
+            Ok(await _userServiceClient.GetAllAsync(new Google.Protobuf.WellKnownTypes.Empty()));
+
+        [HttpGet("current")]
+        public async Task<IActionResult> GetAll()
+        {
+            var userId = HttpContext.GetUserId();
+            var response = await _userServiceClient.GetAsync(new GrpcUserService.GetRequest() { Id = userId });
+
+            return Ok(response);
+        }
+
 
         [HttpPut]
         [Authorize]

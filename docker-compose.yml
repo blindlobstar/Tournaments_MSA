@@ -30,7 +30,7 @@ services:
       - identityservice.api
 
 
-  userservice.api:
+  userservice-api:
     image: ${DOCKER_REGISTRY-}userserviceapi
     build:
       context: .
@@ -49,4 +49,4 @@ services:
       - mssql
       - rabbitmq
       - simpleapigateway
-      - userservice.api
+      - userservice-api

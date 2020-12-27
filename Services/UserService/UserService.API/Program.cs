@@ -14,6 +14,11 @@ namespace UserService.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureKestrel(options =>
+                    {
+                        options.Listen(System.Net.IPAddress.Parse("0.0.0.0"),
+                            81, o => o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2);
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
     }

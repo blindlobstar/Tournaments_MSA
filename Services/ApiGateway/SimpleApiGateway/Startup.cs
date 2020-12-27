@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
 using static GrpcTournamentService.TournamentService;
+using static GrpcUserService.UserService;
 
 namespace SimpleApiGateway
 {
@@ -31,6 +32,11 @@ namespace SimpleApiGateway
             services.AddGrpcClient<TournamentServiceClient>(o =>
             {
                 o.Address = new Uri(Environment.GetEnvironmentVariable("TOURNAMENT_SERVICE"));
+            });
+
+            services.AddGrpcClient<UserServiceClient>(o =>
+            {
+                o.Address = new Uri(Environment.GetEnvironmentVariable("USER_SERVICE"));
             });
 
             services.AddJwtAuth();

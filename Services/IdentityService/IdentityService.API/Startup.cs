@@ -1,3 +1,5 @@
+using Common.Contracts.IdentityService.Events;
+using Common.Core.DataExchange.EventBus;
 using Common.Data.MongoDB;
 using Common.Data.MongoDB.Models;
 using Common.EventBus.RabbitMq;
@@ -58,12 +60,15 @@ namespace IdentityService.API
                 if (admin == null)
                 {
                     var salt = Encoding.ASCII.GetBytes("SaltSaltSalt");
-                    userRepository.Add(new User() 
-                    { 
-                        Login = "Admin1", 
-                        Password = "123".CreateHash(salt), 
-                        Role = "Admin" 
-                    });
+                    var user = new User()
+                    {
+                        Login = "Admin1",
+                        Password = "123".CreateHash(salt),
+                        Role = "Admin"
+                    };
+                    userRepository.Add(user);
+                    var publisher = scope.ServiceProvider.GetRequiredService<IBusPublisher>();
+                    publisher.Publish(new UserAdded() { Id = user.Id, Login = user.Login }).Wait();
                 }
 
             }

@@ -42,11 +42,12 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - TOURNAMENT_SERVICE=http://tournamentservice-api:81
+      - USER_SERVICE=http://userservice-api:81
     ports:
       - "5000:80"
 
 
-  userservice.api:
+  userservice-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
