@@ -14,9 +14,9 @@ namespace Common.EventBus.RabbitMq
         }
 
         public Task Publish<TEvent>(TEvent @event) where TEvent : class, IEvent
-            => _busClient.PublishAsync(@event);
+            => _busClient.PubSub.PublishAsync(@event);
 
         public Task Send<TCommand>(TCommand command) where TCommand : class, ICommand
-            => _busClient.PublishAsync(command);
+            => _busClient.PubSub.PublishAsync(command);
     }
 }

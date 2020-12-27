@@ -2,6 +2,7 @@ using AutoMapper;
 using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.Handlers;
 using Common.EventBus.RabbitMq;
+using Google.Protobuf.WellKnownTypes;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
@@ -80,6 +81,8 @@ namespace TournamentService.API
 
             services.AddAutoMapper(cfg =>
             {
+                cfg.CreateMap<DateTime, Timestamp>()
+                    .ConvertUsing(s => Timestamp.FromDateTime(s.ToUniversalTime()));
                 cfg.CreateMap<TournamentDto, GrpcTournamentService.Tournament>();
                 cfg.CreateMap<ExerciseDto, GrpcTournamentService.Exercise>();
             });

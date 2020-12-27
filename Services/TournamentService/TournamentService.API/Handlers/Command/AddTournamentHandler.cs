@@ -1,7 +1,5 @@
 ﻿using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.Handlers;
-using Hangfire;
-using System;
 using System.Threading.Tasks;
 using TournamentService.API.Logic;
 using TournamentService.Core.Data;
@@ -31,8 +29,6 @@ namespace TournamentService.API.Handlers.Command
             };
             await _tournamentRepository.Add(newTournament);
             await _tournamentRepository.SaveChanges();
-            BackgroundJob.Schedule(() => _calculateTournamentResult.Calculate(newTournament.Id), 
-                newTournament.EndDate.Subtract(DateTime.Now));
         }
     }
 }

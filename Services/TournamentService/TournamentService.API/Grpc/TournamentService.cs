@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Grpc.Core;
 using GrpcTournamentService;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TournamentService.Core.Data;
 using static GrpcTournamentService.TournamentService;
@@ -35,10 +35,8 @@ namespace TournamentService.API.Grpc
         {
             var response = new GetAvaliableResponse();
             var tournaments = await _tournamentRepository.GetAvailable(request.Date.ToDateTime());
-            var grpcTournaments = from tournament in tournaments
-                                  select _mapper.Map<Tournament>(tournament);
 
-            response.Tournaments.AddRange(grpcTournaments);
+            response.Tournaments.AddRange(_mapper.Map<IEnumerable<Tournament>>(tournaments));
 
             return response; 
         }
@@ -47,9 +45,8 @@ namespace TournamentService.API.Grpc
         {
             var response = new GetExercisesResponse();
             var exercises = await _exerciseRepository.GetForTournament(request.TournamentId);
-            var grpcExercises = from exercise in exercises
-                                select _mapper.Map<Exercise>(exercise);
 
+            response.Exercises.AddRange(_mapper.Map<IEnumerable<Exercise>>(exercises));
             return response;
         }
     }

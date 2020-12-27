@@ -1,4 +1,3 @@
-using Common.Core.DataExchange.EventBus;
 using Common.EventBus.RabbitMq;
 using Common.Logic.Auth;
 using Microsoft.AspNetCore.Builder;
@@ -8,8 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using static GrpcTournamentService.TournamentService;
 
 namespace SimpleApiGateway

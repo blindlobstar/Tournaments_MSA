@@ -7,6 +7,7 @@ using Common.Core.DataExchange.EventBus;
 using IdentityService.API.Domain;
 using IdentityService.API.Repositories;
 using IdentityService.API.Requests;
+using IdentityService.API.Utils;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,12 +41,7 @@ namespace IdentityService.API.Controllers
                 return BadRequest();
             }
             
-            var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: user.Password,
-                salt: _salt,
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
+            var hashed = user.Password.CreateHash(_salt);
             
             var newUser = new User()
             {
@@ -64,13 +60,8 @@ namespace IdentityService.API.Controllers
         [Route("SignIn/")]
         public async Task<ActionResult<IJwtToken>> SignIn(SignUser user)
         {
-            var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: user.Password,
-                salt: _salt,
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
-            
+            var hashed = user.Password.CreateHash(_salt);
+
             var authUser = await _userRepository.Authenticate(user.Login, hashed);
 
             if (authUser == null)

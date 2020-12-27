@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.EventBus;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SimpleApiGateway.Utils;
 using static GrpcTournamentService.TournamentService;
 
-namespace SimpleApiGateway.Services.TournamentSvc
+namespace SimpleApiGateway.Services.TournamentSvc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TournamentServiceController : ControllerBase
+    public class TournamentController : ControllerBase
     {
         private readonly IBusPublisher _busPublisher;
         private readonly TournamentServiceClient _tournamentServiceClient;
 
-        public TournamentServiceController(IBusPublisher busPublisher, 
+        public TournamentController(IBusPublisher busPublisher, 
             TournamentServiceClient tournamentServiceClient)
         {
             _busPublisher = busPublisher;
@@ -62,9 +60,7 @@ namespace SimpleApiGateway.Services.TournamentSvc
         [Route("registrate")]
         public async Task<IActionResult> Registrate(int tournamentId)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claim = identity.Claims;
-            var userId = claim.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+            var userId = HttpContext.GetUserId();
 
             var user = new RegisterUser()
             {

@@ -27,7 +27,7 @@ namespace Common.EventBus.RabbitMq
         public IBusSubscriber SubscribeCommand<TCommand>() where TCommand : class, ICommand
         {
             _logger.LogInformation($"Service: {Assembly.GetCallingAssembly().GetName().Name} has subscribed to command: {typeof(TCommand).FullName}");
-            _busClient.SubscribeAsync<TCommand>(string.Empty, async (command) =>
+            _busClient.PubSub.SubscribeAsync<TCommand>(string.Empty, async (command) =>
             {
                 using var scope = _serviceScopeFactory.CreateScope();
                 var handler = (ICommandHandler<TCommand>)scope.ServiceProvider.GetService(typeof(ICommandHandler<TCommand>));
@@ -39,7 +39,7 @@ namespace Common.EventBus.RabbitMq
         public IBusSubscriber SubscribeEvent<TEvent>() where TEvent : class, IEvent
         {
             _logger.LogInformation($"Service: {Assembly.GetCallingAssembly().GetName().Name} has subscribed to event: {typeof(TEvent).FullName}");
-            _busClient.SubscribeAsync<TEvent>(string.Empty, async (@event) =>
+            _busClient.PubSub.SubscribeAsync<TEvent>(string.Empty, async (@event) =>
             {
                 using var scope = _serviceScopeFactory.CreateScope();
                 var handler = (IEventHandler<TEvent>)scope.ServiceProvider.GetService(typeof(IEventHandler<TEvent>));

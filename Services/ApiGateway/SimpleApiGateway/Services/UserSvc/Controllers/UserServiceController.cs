@@ -1,22 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Common.Contracts.UserService.Commands;
 using Common.Core.DataExchange.EventBus;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleApiGateway.Requests;
+using SimpleApiGateway.Utils;
 
-namespace SimpleApiGateway.Controllers
+namespace SimpleApiGateway.Services.UserSvc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserServiceController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IBusPublisher _busPublisher;
 
-        public UserServiceController(IBusPublisher busPublisher)
+        public UserController(IBusPublisher busPublisher)
         {
             _busPublisher = busPublisher;
         }
@@ -25,9 +23,7 @@ namespace SimpleApiGateway.Controllers
         [Authorize]
         public async Task<IActionResult> Put(UppdateUserInformation request)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claim = identity.Claims;
-            var id = claim.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+            var id = HttpContext.GetUserId();
 
             var command = new UpdateUser()
             {
