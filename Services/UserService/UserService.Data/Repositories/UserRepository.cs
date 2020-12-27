@@ -7,8 +7,8 @@ using UserService.Core.Models;
 
 namespace UserService.Data.Repositories
 {
-    public class UserRepository : BaseRepository<User>, IUserRepository
+    public class UserRepository : BaseRepository<UserDto>, IUserRepository
     {
-        public UserRepository(IBaseContext<User> context) : base(context) { }
+        public UserRepository(IBaseContext<UserDto> context) : base(context) { }
     }
 }

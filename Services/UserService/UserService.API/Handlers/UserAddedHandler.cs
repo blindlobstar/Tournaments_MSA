@@ -16,7 +16,7 @@ namespace UserService.API.Handlers
         }
         public async Task HandleAsync(UserAdded @event)
         {
-            var user = new User()
+            var user = new UserDto()
             {
                 Id = @event.Id,
                 Login = @event.Login

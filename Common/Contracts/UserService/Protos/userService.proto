@@ -1,0 +1,29 @@
+﻿syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "GrpcUserService";
+
+message User {
+	string id = 1;
+	string login = 2;
+	string firstName = 3;
+	string lastName = 4;
+	string middleName = 5;
+	string email = 6;
+	string phone = 7;
+	int32 tournamentWinsCount = 8;
+	int32 tournamentsCount = 9;
+}
+
+message GetRequest {
+	string id = 1;
+}
+
+message GetAllResponse {
+	repeated User users = 1;
+}
+
+service UserService {
+	rpc Get (GetRequest) returns (User);
+	rpc GetAll (google.protobuf.Empty) returns (GetAllResponse);
+}

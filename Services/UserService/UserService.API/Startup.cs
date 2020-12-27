@@ -39,7 +39,7 @@ namespace UserService.API
             services.AddMongoDb();
             services.AddRabbitMq();
 
-            services.AddScoped<IBaseContext<User>, UserContext>();
+            services.AddScoped<IBaseContext<UserDto>, UserContext>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             //Inject handlers

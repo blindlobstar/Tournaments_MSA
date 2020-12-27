@@ -3,7 +3,7 @@ using UserService.Core.Models;
 
 namespace UserService.Core.Data
 {
-    public interface IUserRepository : IMongoRepository<User>
+    public interface IUserRepository : IMongoRepository<UserDto>
     {
 
     }

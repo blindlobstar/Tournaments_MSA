@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace UserService.Core.Models
 {
-    public class User : IEntity<string>
+    public class UserDto : IEntity<string>
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -18,7 +18,7 @@ namespace UserService.Core.Models
         public int TournamentWinsCount { get; set; }
         public int TournamentsCount { get; set; }
          
-        public User()
+        public UserDto()
         {
             Id = ObjectId.GenerateNewId().ToString();
         }
