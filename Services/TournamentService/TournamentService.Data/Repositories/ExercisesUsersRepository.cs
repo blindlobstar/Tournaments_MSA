@@ -22,7 +22,7 @@ namespace TournamentService.Data.Repositories
 
         public Task<List<ExercisesUsers>> GetForCalculating(int tournamentId) =>
             (from userAnswer in DbSet
-             join exercise in _dataContext.Set<Exercise>()
+             join exercise in _dataContext.Set<ExerciseDto>()
                  on userAnswer.Exercise equals exercise
              where exercise.TournamentId == tournamentId
              select userAnswer).ToListAsync();

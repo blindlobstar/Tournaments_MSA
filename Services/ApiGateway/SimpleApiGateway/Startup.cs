@@ -7,8 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using static GrpcTournamentService.TournamentService;
 
 namespace SimpleApiGateway
 {
@@ -26,6 +28,13 @@ namespace SimpleApiGateway
         {
             services.AddControllers();
             services.AddRabbitMq();
+
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
+            services.AddGrpcClient<TournamentServiceClient>(o =>
+            {
+                o.Address = new Uri(Environment.GetEnvironmentVariable("TOURNAMENT_SERVICE"));
+            });
 
             services.AddJwtAuth();
             var jwtOptions = new JwtOptions();

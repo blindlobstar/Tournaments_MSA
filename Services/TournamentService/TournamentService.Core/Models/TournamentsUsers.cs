@@ -13,6 +13,6 @@ namespace TournamentService.Core.Models
         public uint? Place { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public virtual Tournament Tournament { get; set; }
+        public virtual TournamentDto Tournament { get; set; }
     }
 }

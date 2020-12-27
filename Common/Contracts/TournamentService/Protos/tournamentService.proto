@@ -1,0 +1,50 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "GrpcTournamentService";
+
+message Exercise {
+	int32 id = 1;
+	google.protobuf.Int32Value orderNumber = 2;
+	string text = 3;
+	string answer = 4;
+	int32 tournamentId = 5;
+}
+
+message Tournament
+{
+	int32 id = 1;
+	string caption = 2;
+	string description = 3;
+	google.protobuf.Timestamp startDate = 4;
+	google.protobuf.Timestamp endDate = 5;
+	google.protobuf.UInt32Value tournamentTime = 6;
+}
+
+message GetAvaliableRequest {
+	google.protobuf.Timestamp date = 1;
+}
+
+message GetAvaliableResponse {
+	repeated Tournament tournaments = 1;
+}
+
+message GetRequest {
+	int32 id = 1;
+}
+
+message GetExercisesRequest {
+	int32 tournamentId = 1;
+}
+
+message GetExercisesResponse {
+	repeated Exercise exercises = 1;
+}
+
+service TournamentService {
+	rpc GetAvaliable (GetAvaliableRequest) returns (GetAvaliableResponse);
+	rpc Get (GetRequest) returns (Tournament);
+	rpc GetExercises (GetExercisesRequest) returns (GetExercisesResponse);
+}

@@ -5,8 +5,8 @@ using TournamentService.Core.Models;
 
 namespace TournamentService.Core.Data
 {
-    public interface IExerciseRepository : IEFRepository<Exercise, int>
+    public interface IExerciseRepository : IEFRepository<ExerciseDto, int>
     {
-        Task<List<Exercise>> GetForTournament(int tournamentId);
+        Task<List<ExerciseDto>> GetForTournament(int tournamentId);
     }
 }

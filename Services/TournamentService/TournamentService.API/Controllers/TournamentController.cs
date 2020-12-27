@@ -26,7 +26,7 @@ namespace TournamentService.API.Controllers
 
         [Route("/{id}")]
         [HttpGet]
-        public async Task<ActionResult<Tournament>> Get(int id)
+        public async Task<ActionResult<TournamentDto>> Get(int id)
         {
             var tournament = await _tournamentRepository.Get(id);
 
@@ -40,7 +40,7 @@ namespace TournamentService.API.Controllers
 
         [Route("")]
         [HttpGet]
-        public async Task<ActionResult<List<Tournament>>> GetAll()
+        public async Task<ActionResult<List<TournamentDto>>> GetAll()
         {
             var tournaments = await _tournamentRepository.GetAll();
 
@@ -54,7 +54,7 @@ namespace TournamentService.API.Controllers
 
         [Route("/Available/{dateTime}")]
         [HttpGet]
-        public async Task<ActionResult<List<Tournament>>> GetAvailable(DateTime dateTime)
+        public async Task<ActionResult<List<TournamentDto>>> GetAvailable(DateTime dateTime)
         {
             var tournaments = await _tournamentRepository.GetAvailable(dateTime);
 
@@ -68,7 +68,7 @@ namespace TournamentService.API.Controllers
 
         [Route("/{id}/Exercises")]
         [HttpGet]
-        public async Task<ActionResult<List<Exercise>>> GetExercisesForTournament(int id)
+        public async Task<ActionResult<List<ExerciseDto>>> GetExercisesForTournament(int id)
         {
             var exercises = await _exerciseRepository.GetForTournament(id);
 

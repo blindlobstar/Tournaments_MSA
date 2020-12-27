@@ -3,9 +3,9 @@ using Common.Core.Data;
 
 namespace TournamentService.Core.Models
 {
-    public class Exercise : IEntity<int>
+    public class ExerciseDto : IEntity<int>
     {
-        public Exercise()
+        public ExerciseDto()
         {
             ExercisesUsers = new HashSet<ExercisesUsers>();
         }
@@ -16,7 +16,7 @@ namespace TournamentService.Core.Models
         public string Answer { get; set; }
         public int TournamentId { get; set; }
 
-        public virtual Tournament Tournament { get; set; }
+        public virtual TournamentDto Tournament { get; set; }
         public virtual ICollection<ExercisesUsers> ExercisesUsers { get; set; }
     }
 }

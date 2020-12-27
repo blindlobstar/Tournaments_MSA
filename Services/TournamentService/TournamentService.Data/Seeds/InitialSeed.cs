@@ -13,7 +13,7 @@ namespace TournamentService.Data.Seeds
             //using (var transaction = dataContext.Database.BeginTransaction())
             //{
 
-            var tournament = new Tournament()
+            var tournament = new TournamentDto()
             {
                 Id = 1,
                 Caption = "New Tournament",
@@ -22,7 +22,7 @@ namespace TournamentService.Data.Seeds
                 EndDate = DateTime.Now.AddDays(3),
                 TournamentTime = 20
             };
-            var tournament2 = new Tournament()
+            var tournament2 = new TournamentDto()
             {
                 Id = 2,
                 Caption = "Old Tournament",
@@ -54,21 +54,21 @@ namespace TournamentService.Data.Seeds
             if (!dataContext.Exercises.Any())
             {
                 dataContext.Exercises.AddRange(
-                    new Exercise()
+                    new ExerciseDto()
                     {
                         Id = 1,
                         Text = "1+1",
                         Answer = "2",
                         OrderNumber = 1,
                         Tournament = tournament
-                    }, new Exercise()
+                    }, new ExerciseDto()
                     {
                         Id = 2,
                         Text = "3+5",
                         Answer = "8",
                         OrderNumber = 2,
                         Tournament = tournament
-                    }, new Exercise()
+                    }, new ExerciseDto()
                     {
                         Id = 3,
                         Text = "First three letters of alphabet",

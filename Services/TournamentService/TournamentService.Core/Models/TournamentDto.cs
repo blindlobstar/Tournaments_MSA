@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace TournamentService.Core.Models
 {
-    public class Tournament : IEntity<int>
+    public class TournamentDto : IEntity<int>
     {
-        public Tournament()
+        public TournamentDto()
         {
-            Exercises = new HashSet<Exercise>();
+            Exercises = new HashSet<ExerciseDto>();
             TournamentsUsers = new HashSet<TournamentsUsers>();
         }
 
@@ -19,7 +19,7 @@ namespace TournamentService.Core.Models
         public DateTime EndDate { get; set; }
         public int? TournamentTime { get; set; }
 
-        public virtual ICollection<Exercise> Exercises { get; set; }
+        public virtual ICollection<ExerciseDto> Exercises { get; set; }
         public virtual ICollection<TournamentsUsers> TournamentsUsers { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace TournamentService.Test.Unit.Repositories
         public async Task GetForTournament_1_Exerciseid1()
         {
             //Arrange
-            var exercise = new Exercise()
+            var exercise = new ExerciseDto()
             {
                 Id = 1,
                 Text = "1+1",

@@ -22,7 +22,7 @@ namespace TournamentService.API.Handlers.Command
 
         public async Task HandleAsync(AddTournament command)
         {
-            var newTournament = new Tournament()
+            var newTournament = new TournamentDto()
             {
                 Caption = command.Caption,
                 Description = command.Description,

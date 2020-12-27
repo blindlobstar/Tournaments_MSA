@@ -6,9 +6,9 @@ using TournamentService.Core.Models;
 
 namespace TournamentService.Core.Data
 {
-    public interface ITournamentRepository : IEFRepository<Tournament, int>
+    public interface ITournamentRepository : IEFRepository<TournamentDto, int>
     {
-        Task<List<Tournament>> GetForUser(string userId);
-        Task<List<Tournament>> GetAvailable(DateTime dateTime);
+        Task<List<TournamentDto>> GetForUser(string userId);
+        Task<List<TournamentDto>> GetAvailable(DateTime dateTime);
     }
 }

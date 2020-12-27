@@ -1,28 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.EventBus;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static GrpcTournamentService.TournamentService;
 
-namespace SimpleApiGateway.Controllers
+namespace SimpleApiGateway.Services.TournamentSvc
 {
     [Route("api/[controller]")]
     [ApiController]
     public class TournamentServiceController : ControllerBase
     {
         private readonly IBusPublisher _busPublisher;
+        private readonly TournamentServiceClient _tournamentServiceClient;
 
-        public TournamentServiceController(IBusPublisher busPublisher)
+        public TournamentServiceController(IBusPublisher busPublisher, 
+            TournamentServiceClient tournamentServiceClient)
         {
             _busPublisher = busPublisher;
+            _tournamentServiceClient = tournamentServiceClient;
         }
 
-        [HttpGet]
-        public string Get() =>
-            "TournamentService is working";
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id) =>
+            Ok(await _tournamentServiceClient
+                .GetAsync(new GrpcTournamentService.GetRequest() { Id = id }));
+
+        [HttpGet("date/{date}")]
+        public async Task<IActionResult> Get(DateTime date) =>
+            Ok(await _tournamentServiceClient
+                .GetAvaliableAsync(new GrpcTournamentService.GetAvaliableRequest() { Date = Timestamp.FromDateTime(date) }));
+
+        [HttpGet("{id}/exercises")]
+        public async Task<IActionResult> GetExercises(int id) =>
+            Ok(await _tournamentServiceClient
+                .GetExercisesAsync(new GrpcTournamentService.GetExercisesRequest() { TournamentId = id }));
 
         [HttpPost]
         [Authorize(Roles = "Admin")]

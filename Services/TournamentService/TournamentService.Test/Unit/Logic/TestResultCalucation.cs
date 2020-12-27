@@ -28,7 +28,7 @@ namespace TournamentService.Test.Unit.Locgic
             _secondUser = Guid.NewGuid().ToString();
             _thirdUser = Guid.NewGuid().ToString();
 
-            var tournament = new Tournament()
+            var tournament = new TournamentDto()
             {
                 Id = 1,
                 Caption = "New Tournament",
@@ -39,9 +39,9 @@ namespace TournamentService.Test.Unit.Locgic
             };
 
 
-            var exercises = new Exercise[]
+            var exercises = new ExerciseDto[]
             {
-                new Exercise()
+                new ExerciseDto()
                 {
                     Id = 1,
                     Text = "1+1",
@@ -49,7 +49,7 @@ namespace TournamentService.Test.Unit.Locgic
                     OrderNumber = 1,
                     Tournament = tournament
                 },
-                new Exercise()
+                new ExerciseDto()
                 {
                     Id = 2,
                     Text = "3+5",
@@ -57,7 +57,7 @@ namespace TournamentService.Test.Unit.Locgic
                     OrderNumber = 2,
                     Tournament = tournament
                 },
-                new Exercise()
+                new ExerciseDto()
                 {
                     Id = 3,
                     Text = "First three letters of alphabet",

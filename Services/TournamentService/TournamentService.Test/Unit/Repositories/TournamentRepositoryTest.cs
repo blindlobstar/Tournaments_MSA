@@ -16,7 +16,7 @@ namespace TournamentService.Test.Unit.Repositories
     {
         private ITournamentRepository _tournamentRepository;
         private DbContextOptions<TournamentContext> _options;
-        private Tournament _baseTournament;
+        private TournamentDto _baseTournament;
 
         [SetUp]
         public void Setup()
@@ -29,7 +29,7 @@ namespace TournamentService.Test.Unit.Repositories
             var tournamentContext = new TournamentContext(_options);
             
             _tournamentRepository = new TournamentRepository(tournamentContext);
-            _baseTournament = new Tournament()
+            _baseTournament = new TournamentDto()
             {
                 Id = 1,
                 Caption = "New Tournament",
@@ -55,7 +55,7 @@ namespace TournamentService.Test.Unit.Repositories
         public async Task Get_id1includeExercise_NewTournamentWithExercise()
         {
             //Arrange
-            var exercise = new Exercise()
+            var exercise = new ExerciseDto()
             {
                 Id = 1,
                 Text = "1+1",
@@ -148,7 +148,7 @@ namespace TournamentService.Test.Unit.Repositories
         public async Task Add_ABCTournament()
         {
             //Arrange
-            var tournament = new Tournament()
+            var tournament = new TournamentDto()
             {
                 Caption = "ABCTournament",
                 EndDate = DateTime.Now.AddDays(1),

@@ -9,14 +9,14 @@ using TournamentService.Core.Models;
 
 namespace TournamentService.Data.Repositories
 {
-    public class TournamentRepository : BaseRepository<Tournament, int>, ITournamentRepository
+    public class TournamentRepository : BaseRepository<TournamentDto, int>, ITournamentRepository
     {
         public TournamentRepository(TournamentContext context) : base(context) { }
-        public async Task<List<Tournament>> GetAvailable(DateTime dateTime) =>
+        public async Task<List<TournamentDto>> GetAvailable(DateTime dateTime) =>
             await DbSet.Where(t => t.EndDate > dateTime)
                 .ToListAsync();
 
-        public async Task<List<Tournament>> GetForUser(string userId) =>
+        public async Task<List<TournamentDto>> GetForUser(string userId) =>
             await DbSet.Where(t => t.TournamentsUsers
                     .Any(tu => tu.UserId.Equals(userId)))
                 .ToListAsync();

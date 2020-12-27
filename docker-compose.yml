@@ -40,7 +40,7 @@ services:
       - rabbitmq
       - simpleapigateway
 
-  tournamentservice.api:
+  tournamentservice-api:
     image: ${DOCKER_REGISTRY-}tournamentserviceapi
     build:
       context: .

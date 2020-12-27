@@ -9,16 +9,19 @@ namespace TournamentService.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Tournament>().HasKey(t => t.Id);
-            modelBuilder.Entity<Tournament>().Property(t => t.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Tournament>()
+            modelBuilder.Entity<TournamentDto>().ToTable("Tournament");
+            modelBuilder.Entity<TournamentDto>().HasKey(t => t.Id);
+            modelBuilder.Entity<TournamentDto>().Property(t => t.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<TournamentDto>()
                 .HasMany(t => t.Exercises)
                 .WithOne(e => e.Tournament)
                 .HasForeignKey(e => e.TournamentId);
 
-            modelBuilder.Entity<Exercise>().HasKey(e => e.Id);
-            modelBuilder.Entity<Exercise>().Property(t => t.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<ExerciseDto>().ToTable("Exercise");
+            modelBuilder.Entity<ExerciseDto>().HasKey(e => e.Id);
+            modelBuilder.Entity<ExerciseDto>().Property(t => t.Id).ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<TournamentsUsers>().ToTable("TournamentsUsers");
             modelBuilder.Entity<TournamentsUsers>().HasKey(r => r.Id);
             modelBuilder.Entity<TournamentsUsers>().Property(t => t.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<TournamentsUsers>()
@@ -27,6 +30,7 @@ namespace TournamentService.Data
                 .HasForeignKey(tu => tu.TournamentId)
                 .IsRequired();
 
+            modelBuilder.Entity<ExercisesUsers>().ToTable("ExercisesUsers");
             modelBuilder.Entity<ExercisesUsers>().HasKey(r => r.Id);
             modelBuilder.Entity<ExercisesUsers>().Property(t => t.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<ExercisesUsers>()
@@ -36,8 +40,8 @@ namespace TournamentService.Data
                 .IsRequired();
         }
 
-        public DbSet<Tournament> Tournaments { get; set; }
-        public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<TournamentDto> Tournaments { get; set; }
+        public DbSet<ExerciseDto> Exercises { get; set; }
         public DbSet<TournamentsUsers> TournamentsUsers { get; set; }
         public DbSet<ExercisesUsers> ExercisesUsers { get; set; }
     }

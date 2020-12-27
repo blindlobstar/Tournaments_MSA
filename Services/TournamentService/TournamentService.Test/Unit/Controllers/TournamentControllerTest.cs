@@ -16,14 +16,14 @@ namespace TournamentService.Test.Unit.Controllers
         private Mock<ITournamentRepository> _tournamentRepositoryMock;
         private Mock<IExerciseRepository> _exerciseRepositoryMock;
         private Mock<ITournamentsUsersRepository> _tournamentsUsersRepositoryMock;
-        private Tournament _tournament;
-        private List<Tournament> _tournaments;
-        private List<Exercise> _exercises;
+        private TournamentDto _tournament;
+        private List<TournamentDto> _tournaments;
+        private List<ExerciseDto> _exercises;
 
         [SetUp]
         public void SetUp()
         {
-            _tournament = new Tournament()
+            _tournament = new TournamentDto()
             {
                 Id = 1,
                 Caption = "New Tournament",
@@ -33,10 +33,10 @@ namespace TournamentService.Test.Unit.Controllers
                 TournamentTime = 20
             };
 
-            _tournaments = new List<Tournament>()
+            _tournaments = new List<TournamentDto>()
             {
                 _tournament,
-                new Tournament()
+                new TournamentDto()
                 {
                     Id = 2,
                     Caption = "Absolute New Tournament",
@@ -47,9 +47,9 @@ namespace TournamentService.Test.Unit.Controllers
                 }
             };
 
-            _exercises = new List<Exercise>()
+            _exercises = new List<ExerciseDto>()
             {
-                new Exercise()
+                new ExerciseDto()
                 {
                     Id = 1,
                     Text = "1+1",
@@ -57,7 +57,7 @@ namespace TournamentService.Test.Unit.Controllers
                     OrderNumber = 1,
                     Tournament = _tournament
                 },
-                new Exercise()
+                new ExerciseDto()
                 {
                     Id = 2,
                     Text = "3+5",
@@ -65,7 +65,7 @@ namespace TournamentService.Test.Unit.Controllers
                     OrderNumber = 2,
                     Tournament = _tournament
                 },
-                new Exercise()
+                new ExerciseDto()
                 {
                     Id = 3,
                     Text = "First three letters of alphabet",

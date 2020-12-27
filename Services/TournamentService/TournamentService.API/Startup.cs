@@ -1,3 +1,4 @@
+using AutoMapper;
 using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.Handlers;
 using Common.EventBus.RabbitMq;
@@ -14,6 +15,7 @@ using System;
 using TournamentService.API.Handlers.Command;
 using TournamentService.API.Logic;
 using TournamentService.Core.Data;
+using TournamentService.Core.Models;
 using TournamentService.Data;
 using TournamentService.Data.Repositories;
 
@@ -31,7 +33,7 @@ namespace TournamentService.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddGrpc();
 
             services.AddLogging(opt =>
             {
@@ -46,22 +48,22 @@ namespace TournamentService.API
                     optionsLifetime: ServiceLifetime.Singleton,
                     contextLifetime: ServiceLifetime.Scoped);
 
-            // Add Hangfire services.
-            services.AddHangfire(configuration => configuration
-                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
-                {
-                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-                    QueuePollInterval = TimeSpan.Zero,
-                    UseRecommendedIsolationLevel = true,
-                    DisableGlobalLocks = true
-                }));
+            //// Add Hangfire services.
+            //services.AddHangfire(configuration => configuration
+            //    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+            //    .UseSimpleAssemblyNameTypeSerializer()
+            //    .UseRecommendedSerializerSettings()
+            //    .UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
+            //    {
+            //        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+            //        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+            //        QueuePollInterval = TimeSpan.Zero,
+            //        UseRecommendedIsolationLevel = true,
+            //        DisableGlobalLocks = true
+            //    }));
 
-            // Add the processing server as IHostedService
-            services.AddHangfireServer();
+            //// Add the processing server as IHostedService
+            //services.AddHangfireServer();
 
             //Inject repositories
             services.AddScoped<ITournamentRepository, TournamentRepository>();
@@ -75,6 +77,12 @@ namespace TournamentService.API
             services.AddScoped<ICommandHandler<RegisterUser>, RegisterUserHandler>();
 
             services.AddTransient<CalculateTournamentResult>();
+
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.CreateMap<TournamentDto, GrpcTournamentService.Tournament>();
+                cfg.CreateMap<ExerciseDto, GrpcTournamentService.Exercise>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,11 +97,9 @@ namespace TournamentService.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapGrpcService<Grpc.TournamentService>();
             });
             //Ensure that database created
             using var scope = app.ApplicationServices.CreateScope();
