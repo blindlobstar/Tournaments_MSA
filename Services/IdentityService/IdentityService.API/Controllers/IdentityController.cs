@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using Common.Contracts.IdentityService.Events;
 using Common.Core.Auth;
@@ -8,7 +7,6 @@ using IdentityService.API.Domain;
 using IdentityService.API.Repositories;
 using IdentityService.API.Requests;
 using IdentityService.API.Utils;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityService.API.Controllers

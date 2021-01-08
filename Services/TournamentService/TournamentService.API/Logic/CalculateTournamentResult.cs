@@ -44,24 +44,25 @@ namespace TournamentService.API.Logic
             return string.Compare(correctAnswer, sb.ToString(), true) == 0;
         }
 
-        public IEnumerable<TournamentsUsers> GetPlaces(List<TournamentsUsers> tournamentsUsers, List<ExercisesUsers> userAnswers)
+        public List<TournamentsUsers> GetPlaces(List<TournamentsUsers> tournamentsUsers, List<ExercisesUsers> userAnswers)
          => (from userScore in userAnswers
                          where userScore.IsCorrect
                          group userScore by userScore.UserId into groupUserScore
                          join ut in tournamentsUsers
-                         on groupUserScore.Key equals ut.UserId
+                            on groupUserScore.Key equals ut.UserId
                          select new
                          {
                              CorrectCount = groupUserScore.Count(),
                              UserId = groupUserScore.Key,
-                             TimeDiff = (ut.EndDate - ut.StartDate).TotalMinutes,
+                             TimeDiff = (ut.EndDate - ut.StartDate).TotalMilliseconds,
                              TournamentsUsers = ut
-                         }).OrderBy(x => x.CorrectCount)
+                         })
+                         .OrderByDescending(x => x.CorrectCount)
                          .ThenBy(x => x.TimeDiff)
                          .Select((a, i) =>
                          {
                              a.TournamentsUsers.Place = (uint)i + 1;
                              return a.TournamentsUsers;
-                         });
+                         }).ToList();
     }
 }

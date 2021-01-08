@@ -179,25 +179,54 @@ namespace TournamentService.Test.Unit.Locgic
             Assert.IsFalse(isCorrect);
         }
 
-        // [Test]
-        // public void GetPlacesTest()
-        // {
-        //     //Arrange
-        //     _exercisesUsersRepository.Setup(x => x.GetForCalculating(1)).ReturnsAsync(_exercisesUsers);
-        //     _tournamentsUsersRepository.Setup(x => x.GetForTournament(1)).ReturnsAsync(_tournamentsUsers);
-        //     _calculateTournamentResult = new CalculateTournamentResult(_exercisesUsersRepository.Object, _tournamentsUsersRepository.Object);
+        [Test]
+        public void GetPlaces_SecondUser_FirstPlace()
+        {
+            //Arrange
+            _exercisesUsersRepository.Setup(x => x.GetForCalculating(1)).ReturnsAsync(_exercisesUsers);
+            _tournamentsUsersRepository.Setup(x => x.GetForTournament(1)).ReturnsAsync(_tournamentsUsers);
+            _calculateTournamentResult = new CalculateTournamentResult(_exercisesUsersRepository.Object, _tournamentsUsersRepository.Object);
 
-        //     //Act
-        //     var userList = _calculateTournamentResult.GetPlaces(_tournamentsUsers, _exercisesUsers).ToList();
+            //Act
+            var userList = _calculateTournamentResult.GetPlaces(_tournamentsUsers, _exercisesUsers);
 
-        //     //Assert
-        //     Assert.AreEqual(userList.First().Place, 1);
-        //     Assert.AreEqual(userList.First().UserId, _secondUser);
-        //     Assert.AreEqual(userList.First(u => u.UserId == _firstUser).Place, 2);
-        //     Assert.AreEqual(userList.First(u => u.UserId == _thirdUser).Place, 3);
-        // }
+            //Assert
+            Assert.AreEqual(userList.First().Place, 1);
+            Assert.AreEqual(userList.First().UserId, _secondUser);
+        }
 
-        
+        [Test]
+        public void GetPlaces_FirstUser_SecondPlace()
+        {
+            //Arrange
+            _exercisesUsersRepository.Setup(x => x.GetForCalculating(1)).ReturnsAsync(_exercisesUsers);
+            _tournamentsUsersRepository.Setup(x => x.GetForTournament(1)).ReturnsAsync(_tournamentsUsers);
+            _calculateTournamentResult = new CalculateTournamentResult(_exercisesUsersRepository.Object, _tournamentsUsersRepository.Object);
+
+            //Act
+            var userList = _calculateTournamentResult.GetPlaces(_tournamentsUsers, _exercisesUsers);
+
+            //Assert
+            Assert.AreEqual(userList.First(u => u.UserId == _firstUser).Place, 2);
+        }
+
+        [Test]
+        public void GetPlaces_ThirdUser_LastPlace()
+        {
+            //Arrange
+            _exercisesUsersRepository.Setup(x => x.GetForCalculating(1)).ReturnsAsync(_exercisesUsers);
+            _tournamentsUsersRepository.Setup(x => x.GetForTournament(1)).ReturnsAsync(_tournamentsUsers);
+            _calculateTournamentResult = new CalculateTournamentResult(_exercisesUsersRepository.Object, _tournamentsUsersRepository.Object);
+
+            //Act
+            var userList = _calculateTournamentResult.GetPlaces(_tournamentsUsers, _exercisesUsers);
+
+            //Assert
+            Assert.AreEqual(userList.Last().Place, 3);
+            Assert.AreEqual(userList.First(u => u.UserId == _thirdUser).Place, 3);
+        }
+
+
 
     }
 }
