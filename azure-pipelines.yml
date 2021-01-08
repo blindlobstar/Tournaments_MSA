@@ -25,8 +25,8 @@ steps:
   inputs:
     command: 'restore'
     projects: '$(solution)'
-    feedsToUse: 'config'
-    nugetConfigPath: '$(solution)'
+    feedsToUse: 'select'
+    vstsFeed: 'de95ff58-29e2-4fc0-832b-24031d36b711'
 
 - task: DotNetCoreCLI@2
   inputs:
