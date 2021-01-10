@@ -1,35 +1,25 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using TournamentService.Core.Data;
 using TournamentService.Core.Models;
-using TournamentService.Data;
 using TournamentService.Data.Repositories;
-using TournamentService.Data.Seeds;
 
 namespace TournamentService.Test.Unit.Repositories
 {
-    public class ExerciseRepositoryTest
+    [TestFixture]
+    public sealed class ExerciseRepositoryTest : RepositoryTestBase
     {
         private IExerciseRepository _exerciseRepository;
-        private DbContextOptions<TournamentContext> _options;
 
         [SetUp]
         public void Setup()
         {
-            _options = new DbContextOptionsBuilder<TournamentContext>()
-                .UseInMemoryDatabase(databaseName: "TournamentRepositoryTest")
-                .Options;
-            using var context = new TournamentContext(_options);
-            context.EnsureSeed();
-            var tournamentContext = new TournamentContext(_options);
-
-            _exerciseRepository = new ExerciseRepository(tournamentContext);
+            _exerciseRepository = new ExerciseRepository(Context);
         }
 
         [Test]
-        public async Task GetForTournament_1_Exerciseid1()
+        public async Task GetForTournament_1_ExerciseId_1()
         {
             //Arrange
             var exercise = new ExerciseDto()

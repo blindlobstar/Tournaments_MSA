@@ -20,16 +20,11 @@ namespace TournamentService.Data.Repositories
                 UserAnswer = answer
             });
 
-        public Task<List<ExercisesUsers>> GetForCalculating(int tournamentId) =>
+        public Task<List<ExercisesUsers>> GetByTournamentId(int tournamentId) =>
             (from userAnswer in DbSet
              join exercise in _dataContext.Set<ExerciseDto>()
                  on userAnswer.Exercise equals exercise
              where exercise.TournamentId == tournamentId
-             select userAnswer).ToListAsync();
-
-        public Task<List<ExercisesUsers>> GetForExercises(IEnumerable<int> exercisesIds) =>
-            (from userAnswer in DbSet
-             where exercisesIds.Contains(userAnswer.ExerciseId)
              select userAnswer).ToListAsync();
     }
 }

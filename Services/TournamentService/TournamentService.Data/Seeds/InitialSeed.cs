@@ -75,6 +75,13 @@ namespace TournamentService.Data.Seeds
                         Answer = "a,b,c",
                         OrderNumber = 3,
                         Tournament = tournament
+                    }, new ExerciseDto()
+                    {
+                        Id = 4,
+                        Text = "First three letters of alphabet",
+                        Answer = "a,b,c",
+                        OrderNumber = 3,
+                        Tournament = tournament2
                     });
                 //dataContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Exercises ON");
                 dataContext.SaveChanges();

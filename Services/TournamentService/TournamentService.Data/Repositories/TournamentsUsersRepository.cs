@@ -12,9 +12,10 @@ namespace TournamentService.Data.Repositories
     {
         public TournamentsUsersRepository(TournamentContext context) : base(context) { }
 
-        public Task<List<TournamentsUsers>> GetForTournament(int tournamentId)
-        {
-            return DbSet.Where(x => x.TournamentId == tournamentId).ToListAsync();
-        }
+        public Task<List<TournamentsUsers>> GetByTournamentId(int tournamentId) =>
+            (from data in DbSet
+             where data.TournamentId == tournamentId
+             select data)
+            .ToListAsync();
     }
 }

@@ -56,7 +56,7 @@ namespace SimpleApiGateway.Services.TournamentSvc.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [Route("registrate")]
         public async Task<IActionResult> Registrate(int tournamentId)
         {

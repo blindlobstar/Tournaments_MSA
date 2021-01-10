@@ -2,33 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using TournamentService.Core.Data;
 using TournamentService.Core.Models;
-using TournamentService.Data;
 using TournamentService.Data.Repositories;
-using TournamentService.Data.Seeds;
 
 namespace TournamentService.Test.Unit.Repositories
 {
-    public class TournamentRepositoryTest
+    [TestFixture]
+    public class TournamentRepositoryTest : RepositoryTestBase
     {
         private ITournamentRepository _tournamentRepository;
-        private DbContextOptions<TournamentContext> _options;
         private TournamentDto _baseTournament;
 
         [SetUp]
         public void Setup()
         {
-            _options = new DbContextOptionsBuilder<TournamentContext>()
-                .UseInMemoryDatabase(databaseName: "TournamentRepositoryTest")
-                .Options;
-            using var context = new TournamentContext(_options);
-            context.EnsureSeed();
-            var tournamentContext = new TournamentContext(_options);
-            
-            _tournamentRepository = new TournamentRepository(tournamentContext);
+            _tournamentRepository = new TournamentRepository(Context);
             _baseTournament = new TournamentDto()
             {
                 Id = 1,
@@ -224,17 +214,20 @@ namespace TournamentService.Test.Unit.Repositories
         }
 
         [Test]
-        public async Task Delete_1_null()
+        public async Task Delete_3_IsExisted_true_AfterDeleted_null()
         {
+            //Arrange
+            var beforeDeleted = await _tournamentRepository.Get(3);
+            var isExisted = beforeDeleted is not null;
+
             //Act
-            await _tournamentRepository.Delete(1);
+            await _tournamentRepository.Delete(3);
             await _tournamentRepository.SaveChanges();
-            var deletedTournament = await _tournamentRepository.Get(1);
+            var afterDeleted = await _tournamentRepository.Get(3);
 
             //Assert
-            Assert.Null(deletedTournament);
-            await _tournamentRepository.Add(_baseTournament);
-            await _tournamentRepository.SaveChanges();
+            Assert.IsTrue(isExisted);
+            Assert.Null(afterDeleted);
         }
 
     }

@@ -183,8 +183,8 @@ namespace TournamentService.Test.Unit.Locgic
         public void GetPlaces_SecondUser_FirstPlace()
         {
             //Arrange
-            _exercisesUsersRepository.Setup(x => x.GetForCalculating(1)).ReturnsAsync(_exercisesUsers);
-            _tournamentsUsersRepository.Setup(x => x.GetForTournament(1)).ReturnsAsync(_tournamentsUsers);
+            _exercisesUsersRepository.Setup(x => x.GetByTournamentId(1)).ReturnsAsync(_exercisesUsers);
+            _tournamentsUsersRepository.Setup(x => x.GetByTournamentId(1)).ReturnsAsync(_tournamentsUsers);
             _calculateTournamentResult = new CalculateTournamentResult(_exercisesUsersRepository.Object, _tournamentsUsersRepository.Object);
 
             //Act
@@ -199,8 +199,8 @@ namespace TournamentService.Test.Unit.Locgic
         public void GetPlaces_FirstUser_SecondPlace()
         {
             //Arrange
-            _exercisesUsersRepository.Setup(x => x.GetForCalculating(1)).ReturnsAsync(_exercisesUsers);
-            _tournamentsUsersRepository.Setup(x => x.GetForTournament(1)).ReturnsAsync(_tournamentsUsers);
+            _exercisesUsersRepository.Setup(x => x.GetByTournamentId(1)).ReturnsAsync(_exercisesUsers);
+            _tournamentsUsersRepository.Setup(x => x.GetByTournamentId(1)).ReturnsAsync(_tournamentsUsers);
             _calculateTournamentResult = new CalculateTournamentResult(_exercisesUsersRepository.Object, _tournamentsUsersRepository.Object);
 
             //Act
@@ -214,8 +214,8 @@ namespace TournamentService.Test.Unit.Locgic
         public void GetPlaces_ThirdUser_LastPlace()
         {
             //Arrange
-            _exercisesUsersRepository.Setup(x => x.GetForCalculating(1)).ReturnsAsync(_exercisesUsers);
-            _tournamentsUsersRepository.Setup(x => x.GetForTournament(1)).ReturnsAsync(_tournamentsUsers);
+            _exercisesUsersRepository.Setup(x => x.GetByTournamentId(1)).ReturnsAsync(_exercisesUsers);
+            _tournamentsUsersRepository.Setup(x => x.GetByTournamentId(1)).ReturnsAsync(_tournamentsUsers);
             _calculateTournamentResult = new CalculateTournamentResult(_exercisesUsersRepository.Object, _tournamentsUsersRepository.Object);
 
             //Act

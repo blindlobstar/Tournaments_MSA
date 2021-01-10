@@ -1,8 +1,6 @@
 ﻿using Common.Contracts.TournamentService.Commands;
 using Common.Core.DataExchange.Handlers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TournamentService.Core.Data;
 
@@ -20,11 +18,13 @@ namespace TournamentService.API.Handlers.Command
         public async Task HandleAsync(UpdateTournament command)
         {
             var tournament = await _tournamentRepository.Get(command.Id);
+
             tournament.Caption = string.IsNullOrWhiteSpace(command.Caption) ? tournament.Caption : command.Caption;
             tournament.Description = string.IsNullOrWhiteSpace(command.Description) ? tournament.Description : command.Description;
-            tournament.EndDate = DateTime.MinValue.Equals(command.EndDate) ? tournament.EndDate : command.EndDate;
-            tournament.StartDate = DateTime.MinValue.Equals(command.StartDate) ? tournament.StartDate : command.StartDate;
+            tournament.EndDate = command.EndDate.HasValue ? tournament.EndDate : command.EndDate.Value;
+            tournament.StartDate = command.StartDate.HasValue ? tournament.StartDate : command.StartDate.Value;
             tournament.TournamentTime = command.TournamentTime ?? tournament.TournamentTime;
+
             await _tournamentRepository.SaveChanges();
         }
     }

@@ -7,6 +7,6 @@ namespace TournamentService.Core.Data
 {
     public interface ITournamentsUsersRepository : IEFRepository<TournamentsUsers,int>
     {
-        Task<List<TournamentsUsers>> GetForTournament(int tournamentId);
+        Task<List<TournamentsUsers>> GetByTournamentId(int tournamentId);
     }
 }

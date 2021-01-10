@@ -21,8 +21,8 @@ namespace TournamentService.API.Logic
 
         public async Task Calculate(int tournamentId)
         {
-            var usersExercises = await _exercisesUsersRepository.GetForCalculating(tournamentId);
-            var usersTournaments = await _tournamentsUsersRepository.GetForTournament(tournamentId);
+            var usersExercises = await _exercisesUsersRepository.GetByTournamentId(tournamentId);
+            var usersTournaments = await _tournamentsUsersRepository.GetByTournamentId(tournamentId);
             
             Parallel.ForEach(usersExercises, (current) =>
             {

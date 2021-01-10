@@ -12,12 +12,13 @@ namespace TournamentService.Data.Repositories
     public class TournamentRepository : BaseRepository<TournamentDto, int>, ITournamentRepository
     {
         public TournamentRepository(TournamentContext context) : base(context) { }
-        public async Task<List<TournamentDto>> GetAvailable(DateTime dateTime) =>
-            await DbSet.Where(t => t.EndDate > dateTime)
+        
+        public Task<List<TournamentDto>> GetAvailable(DateTime dateTime) =>
+            DbSet.Where(t => t.EndDate > dateTime)
                 .ToListAsync();
 
-        public async Task<List<TournamentDto>> GetForUser(string userId) =>
-            await DbSet.Where(t => t.TournamentsUsers
+        public Task<List<TournamentDto>> GetForUser(string userId) =>
+            DbSet.Where(t => t.TournamentsUsers
                     .Any(tu => tu.UserId.Equals(userId)))
                 .ToListAsync();
     }
