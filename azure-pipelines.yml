@@ -38,6 +38,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(solution)'
+    arguments: '--filter TestCategory!~Functional'
 
 - task: DockerCompose@0
   inputs:
