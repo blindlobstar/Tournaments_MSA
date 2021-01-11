@@ -7,6 +7,7 @@ using NUnit.Framework;
 namespace Tournament.FunctionalTest
 {
     [TestFixture]
+    [Category("Functional")]
     public class TournamentServiceTest
     {
         private GrpcTournamentService.TournamentService.TournamentServiceClient _client;
