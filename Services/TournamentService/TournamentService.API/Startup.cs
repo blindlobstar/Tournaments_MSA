@@ -46,9 +46,14 @@ namespace TournamentService.API
 
             services.AddRabbitMq(Environment.GetEnvironmentVariable(RABBITMQ_CONNECTION));
 
-            services.AddDbContext<TournamentContext>(option => option
-                .UseSqlServer(Environment.GetEnvironmentVariable(MSSQL_CONNECTION) ?? Configuration.GetConnectionString("Default"),
-                        x => x.MigrationsAssembly("TournamentService.Data")),
+            services.AddDbContext<TournamentContext>(option => 
+                    option.UseSqlServer(Environment.GetEnvironmentVariable(MSSQL_CONNECTION) ?? Configuration.GetConnectionString("Default"),
+                        x =>
+                        {
+                            x.MigrationsAssembly("TournamentService.Data");
+                            x.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(15),
+                                errorNumbersToAdd: null);
+                        }),
                     optionsLifetime: ServiceLifetime.Singleton,
                     contextLifetime: ServiceLifetime.Scoped);
 
