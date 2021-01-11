@@ -20,4 +20,4 @@ services:
       - mssql-test
       - rabbitmq-test
     volumes:
-      - /tests
+      - /tests:/tests
