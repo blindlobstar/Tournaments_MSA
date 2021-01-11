@@ -57,6 +57,6 @@ steps:
 - task: PublishTestResults@2
   displayName: 'Publish functional tests'
   inputs:
-    testResultsFormat: 'NUnit'
+    testResultsFormat: 'VSTest'
     testResultsFiles: '/tests-results/*.xml'
     failTaskOnFailedTests: true
