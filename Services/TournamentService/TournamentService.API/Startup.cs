@@ -19,11 +19,14 @@ using TournamentService.Core.Data;
 using TournamentService.Core.Models;
 using TournamentService.Data;
 using TournamentService.Data.Repositories;
+using TournamentService.Data.Seeds;
 
 namespace TournamentService.API
 {
     public class Startup
     {
+        private static string MSSQL_CONNECTION = "MSSQL_CONNECTION";
+        private static string RABBITMQ_CONNECTION = "RABBITMQ_CONNECTION";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,10 +44,10 @@ namespace TournamentService.API
                 opt.AddConsole();
             });
 
-            services.AddRabbitMq();
+            services.AddRabbitMq(Environment.GetEnvironmentVariable(RABBITMQ_CONNECTION));
 
             services.AddDbContext<TournamentContext>(option => option
-                .UseSqlServer(Configuration.GetConnectionString("Default"),
+                .UseSqlServer(Environment.GetEnvironmentVariable(MSSQL_CONNECTION) ?? Configuration.GetConnectionString("Default"),
                         x => x.MigrationsAssembly("TournamentService.Data")),
                     optionsLifetime: ServiceLifetime.Singleton,
                     contextLifetime: ServiceLifetime.Scoped);
@@ -104,8 +107,15 @@ namespace TournamentService.API
             {
                 endpoints.MapGrpcService<Grpc.TournamentService>();
             });
-            //Ensure that database created
+
             using var scope = app.ApplicationServices.CreateScope();
+            if (bool.TryParse(Environment.GetEnvironmentVariable("IS_TEST"), out var isTest) && isTest)
+            {
+                //Seed data, if test
+                scope.ServiceProvider.GetService<TournamentContext>().EnsureSeedIdentityInsert();
+            }
+
+            //Ensure that database created
             scope.ServiceProvider.GetService<TournamentContext>().Database.EnsureCreated();
 
             app.UseRabbitMq()

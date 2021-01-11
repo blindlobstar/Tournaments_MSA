@@ -7,9 +7,9 @@ using TournamentService.Core.Data;
 using TournamentService.Core.Models;
 using System.Linq;
 
-namespace TournamentService.Test.Unit.Locgic
+namespace TournamentService.Test.Unit.Logic
 {
-    public class TestResultCalucation
+    public class TestResultCalculation
     {
         private CalculateTournamentResult _calculateTournamentResult;
         private Mock<ITournamentsUsersRepository> _tournamentsUsersRepository;
@@ -41,7 +41,7 @@ namespace TournamentService.Test.Unit.Locgic
 
             var exercises = new ExerciseDto[]
             {
-                new ExerciseDto()
+                new ()
                 {
                     Id = 1,
                     Text = "1+1",
@@ -49,7 +49,7 @@ namespace TournamentService.Test.Unit.Locgic
                     OrderNumber = 1,
                     Tournament = tournament
                 },
-                new ExerciseDto()
+                new ()
                 {
                     Id = 2,
                     Text = "3+5",
@@ -57,7 +57,7 @@ namespace TournamentService.Test.Unit.Locgic
                     OrderNumber = 2,
                     Tournament = tournament
                 },
-                new ExerciseDto()
+                new ()
                 {
                     Id = 3,
                     Text = "First three letters of alphabet",
@@ -70,7 +70,7 @@ namespace TournamentService.Test.Unit.Locgic
 
             _tournamentsUsers = new List<TournamentsUsers>()
             {
-                new TournamentsUsers()
+                new ()
                 {
                     Tournament = tournament,
                     TournamentId = tournament.Id,
@@ -78,7 +78,7 @@ namespace TournamentService.Test.Unit.Locgic
                     StartDate = DateTime.Now.Date,
                     EndDate = DateTime.Now.Date.AddMinutes(20)
                 },
-                new TournamentsUsers()
+                new ()
                 {
                     Tournament = tournament,
                     TournamentId = tournament.Id,
@@ -86,7 +86,7 @@ namespace TournamentService.Test.Unit.Locgic
                     StartDate = DateTime.Now.Date,
                     EndDate = DateTime.Now.Date.AddMinutes(10)
                 },
-                new TournamentsUsers()
+                new ()
                 {
                     Tournament = tournament,
                     TournamentId = tournament.Id,
@@ -98,7 +98,7 @@ namespace TournamentService.Test.Unit.Locgic
 
             _exercisesUsers = new List<ExercisesUsers>()
             {
-                new ExercisesUsers()
+                new()
                 {
                     Exercise = exercises[0],
                     UserAnswer = "2",
@@ -106,7 +106,7 @@ namespace TournamentService.Test.Unit.Locgic
                     UserId = _firstUser,
                     IsCorrect = true
                 },
-                new ExercisesUsers()
+                new ()
                 {
                     Exercise = exercises[0],
                     UserAnswer = "2",
@@ -114,7 +114,7 @@ namespace TournamentService.Test.Unit.Locgic
                     UserId = _secondUser,
                     IsCorrect = true
                 },
-                new ExercisesUsers()
+                new ()
                 {
                     Exercise = exercises[0],
                     UserAnswer = "2",
@@ -122,7 +122,7 @@ namespace TournamentService.Test.Unit.Locgic
                     UserId = _thirdUser,
                     IsCorrect = true
                 },
-                new ExercisesUsers()
+                new ()
                 {
                     Exercise = exercises[1],
                     UserAnswer = "8",
@@ -130,7 +130,7 @@ namespace TournamentService.Test.Unit.Locgic
                     UserId = _firstUser,
                     IsCorrect = true
                 },
-                new ExercisesUsers()
+                new ()
                 {
                     Exercise = exercises[1],
                     UserAnswer = "8",
@@ -138,7 +138,7 @@ namespace TournamentService.Test.Unit.Locgic
                     UserId = _secondUser,
                     IsCorrect = true
                 },
-                new ExercisesUsers()
+                new ()
                 {
                     Exercise = exercises[1],
                     UserAnswer = "9",
@@ -225,8 +225,5 @@ namespace TournamentService.Test.Unit.Locgic
             Assert.AreEqual(userList.Last().Place, 3);
             Assert.AreEqual(userList.First(u => u.UserId == _thirdUser).Place, 3);
         }
-
-
-
     }
 }

@@ -59,6 +59,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DistributedCache.CustomExte
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{60DE488F-B955-4886-939C-4B16F603DCCF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament.FunctionalTest", "Services\TournamentService\Tournament.FunctioanlTest\Tournament.FunctionalTest.csproj", "{3F816B48-5F58-417D-92FC-338DFE19E560}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -309,6 +311,18 @@ Global
 		{60DE488F-B955-4886-939C-4B16F603DCCF}.Release|x64.Build.0 = Release|Any CPU
 		{60DE488F-B955-4886-939C-4B16F603DCCF}.Release|x86.ActiveCfg = Release|Any CPU
 		{60DE488F-B955-4886-939C-4B16F603DCCF}.Release|x86.Build.0 = Release|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Debug|x64.Build.0 = Debug|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Debug|x86.Build.0 = Debug|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Release|x64.ActiveCfg = Release|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Release|x64.Build.0 = Release|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Release|x86.ActiveCfg = Release|Any CPU
+		{3F816B48-5F58-417D-92FC-338DFE19E560}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -338,6 +352,7 @@ Global
 		{ED52A001-C76F-4EE8-A469-2E0639C58B90} = {0DC0B40F-D6F2-43E4-9985-6704B6A1B987}
 		{CDF7761D-8BF5-47DD-AB29-B6F834BA39A1} = {ED52A001-C76F-4EE8-A469-2E0639C58B90}
 		{5AC13E62-090E-4E42-958A-C34904276B77} = {C236A556-6E35-4862-88C1-47EA0D4365B5}
+		{3F816B48-5F58-417D-92FC-338DFE19E560} = {4BAA06A9-8D56-433B-B33C-A29A787736BA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7CD195B7-45B0-4AD0-9C11-6D8B2AE6C6F1}

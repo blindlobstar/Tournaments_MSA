@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+
+  mssql-test:
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"
+  
+  mongodb-test:
+    ports:
+      - "27017:27017"
+
+  rabbitmq-test:
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  tournamentservice-api-functionaltest:
+    environment:
+      - IS_TEST=true
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - MSSQL_CONNECTION=Server=mssql-test;Database=Tournaments_MSA; User Id=sa;Password=Pass@word;
+      - RABBITMQ_CONNECTION=host=rabbitmq-test;username=guest;password=guest
+    entrypoint:
+        - dotnet
+        - test
+        - --logger
+        - trx;LogFileName=/tests/tournamentservice-api-functional-test-results.xml
+

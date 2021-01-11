@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  mssql-test:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+  
+  mongodb-test:
+    image: mongo
+
+  rabbitmq-test:
+    image: rabbitmq:3-management-alpine
+
+  tournamentservice-api-functionaltest:
+    image: ${DOCKER_REGISTRY-}tournamentservice-api-functionaltest
+    build:
+      context: .
+      dockerfile: Services/TournamentService/TournamentService.API/Dockerfile
+      target: functionaltest
+    depends_on:
+      - mssql-test
+      - rabbitmq-test
+    volumes:
+      - /tests

@@ -31,5 +31,14 @@ namespace Common.EventBus.RabbitMq
 
             services.AddSingleton<IBusSubscriber, BusSubscriber>();
         }
+
+        public static void AddRabbitMq(this IServiceCollection services, string connectionString)
+        {
+            services.AddTransient(typeof(IBus), service => RabbitHutch.CreateBus(connectionString));
+
+            services.AddTransient<IBusPublisher, BusPublisher>();
+
+            services.AddSingleton<IBusSubscriber, BusSubscriber>();
+        }
     }
 }

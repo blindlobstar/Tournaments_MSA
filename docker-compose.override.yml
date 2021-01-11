@@ -22,6 +22,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
+      - MSSQL_CONNECTION=Server=mssql;Database=Tournaments_MSA; User Id=sa;Password=Pass@word;
+      - RABBITMQ_CONNECTION=host=rabbitmq;username=guest;password=guest
     ports:
       - "5002:80"
     volumes:
