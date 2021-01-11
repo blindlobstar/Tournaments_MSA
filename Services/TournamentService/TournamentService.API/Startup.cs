@@ -12,7 +12,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Polly;
 using System;
+using System.Data.SqlClient;
+using System.Threading;
 using TournamentService.API.Handlers.Command;
 using TournamentService.API.Logic;
 using TournamentService.Core.Data;
@@ -116,8 +119,11 @@ namespace TournamentService.API
             using var scope = app.ApplicationServices.CreateScope();
             if (bool.TryParse(Environment.GetEnvironmentVariable("IS_TEST"), out var isTest) && isTest)
             {
+                var retryPolicy = Policy.Handle<SqlException>()
+                    .WaitAndRetry(15, retry => TimeSpan.FromSeconds(retry * 2));
                 //Seed data, if test
-                scope.ServiceProvider.GetService<TournamentContext>().EnsureSeedIdentityInsert();
+                var context = scope.ServiceProvider.GetService<TournamentContext>();
+                retryPolicy.Execute(() => context.EnsureSeedIdentityInsert());
             }
 
             //Ensure that database created
