@@ -117,14 +117,6 @@ namespace TournamentService.API
             });
 
             using var scope = app.ApplicationServices.CreateScope();
-            if (bool.TryParse(Environment.GetEnvironmentVariable("IS_TEST"), out var isTest) && isTest)
-            {
-                var retryPolicy = Policy.Handle<SqlException>()
-                    .WaitAndRetry(15, retry => TimeSpan.FromSeconds(retry * 2));
-                //Seed data, if test
-                var context = scope.ServiceProvider.GetService<TournamentContext>();
-                retryPolicy.Execute(() => context.EnsureSeedIdentityInsert());
-            }
 
             //Ensure that database created
             scope.ServiceProvider.GetService<TournamentContext>().Database.EnsureCreated();
