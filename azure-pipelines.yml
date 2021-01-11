@@ -22,6 +22,7 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Restore solution'
   inputs:
     command: 'restore'
     projects: '$(solution)'
@@ -29,18 +30,21 @@ steps:
     vstsFeed: 'de95ff58-29e2-4fc0-832b-24031d36b711'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Build solution'
   inputs:
     command: 'build'
     projects: '$(solution)'
 
 
 - task: DotNetCoreCLI@2
+  displayName: 'Run and publish unit tests'
   inputs:
     command: 'test'
     projects: '$(solution)'
     arguments: '--filter TestCategory!~Functional'
 
 - task: DockerCompose@0
+  displayName: 'Run functional tests'
   inputs:
     containerregistrytype: 'Container Registry'
     dockerComposeFile: 'docker-compose-test.yml'
@@ -48,3 +52,11 @@ steps:
     projectName: '$(Build.Repository.Name).TournamentServiceApiFunctionalTest'
     action: 'Run services'
     detached: false
+    requireAdditionalDockerComposeFiles: true
+
+- task: PublishTestResults@2
+  displayName: 'Publish functional tests'
+  inputs:
+    testResultsFormat: 'NUnit'
+    testResultsFiles: '**/*-test-results.xml'
+    failTaskOnFailedTests: true
