@@ -38,3 +38,12 @@ steps:
   inputs:
     command: 'test'
     projects: '$(solution)'
+
+- task: DockerCompose@0
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerComposeFile: '**/docker-compose-test.yml'
+    additionalDockerComposeFiles: '**/docker-compose-test.override.yml'
+    projectName: '$(Build.Repository.Name).TournamentServiceApiFunctionalTest'
+    action: 'Run services'
+    detached: false
