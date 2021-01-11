@@ -49,10 +49,9 @@ steps:
     containerregistrytype: 'Container Registry'
     dockerComposeFile: 'docker-compose-test.yml'
     additionalDockerComposeFiles: 'docker-compose-test.override.yml'
-    projectName: 
     qualifyImageNames: false
-    action: 'Run services'
-    detached: false
+    action: 'Run a Docker Compose command'
+    dockerComposeCommand: 'up --build --abort-on-container-exit'
     requireAdditionalDockerComposeFiles: true
 
 - task: PublishTestResults@2
