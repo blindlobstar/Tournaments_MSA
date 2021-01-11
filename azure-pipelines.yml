@@ -49,7 +49,8 @@ steps:
     containerregistrytype: 'Container Registry'
     dockerComposeFile: 'docker-compose-test.yml'
     additionalDockerComposeFiles: 'docker-compose-test.override.yml'
-    projectName: '$(Build.Repository.Name).TournamentServiceApiFunctionalTest'
+    projectName: 
+    qualifyImageNames: false
     action: 'Run services'
     detached: false
     requireAdditionalDockerComposeFiles: true
