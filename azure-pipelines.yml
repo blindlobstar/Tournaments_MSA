@@ -58,5 +58,5 @@ steps:
   displayName: 'Publish functional tests'
   inputs:
     testResultsFormat: 'NUnit'
-    testResultsFiles: '**/*-test-results.xml'
+    testResultsFiles: '/tests-results/*.xml'
     failTaskOnFailedTests: true
