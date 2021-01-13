@@ -5,6 +5,11 @@ namespace ExerciseFlow.API.Actors
 {
     public sealed class ExerciseActor : UntypedActor
     {
+        public interface IAnswerResponse
+        {
+            
+        }
+
         public sealed class GetExerciseRequest
         {
             public GetExerciseRequest(int requestId)
@@ -37,26 +42,18 @@ namespace ExerciseFlow.API.Actors
             public string Answer { get; }
         }
 
-        public sealed class TakeAnswerResponse
+        public sealed class TakeAnswerResponse : IAnswerResponse
         {
-            public TakeAnswerResponse(int exerciseId, bool isCorrect)
+            public TakeAnswerResponse(int exerciseId, bool isCorrect, string answer)
             {
                 ExerciseId = exerciseId;
                 IsCorrect = isCorrect;
+                Answer = answer;
             }
 
             public int ExerciseId { get; }
             public bool IsCorrect { get; }
-        }
-
-        public sealed class TakeAnswerTimeOutResponse
-        {
-            public TakeAnswerTimeOutResponse(int exerciseId)
-            {
-                ExerciseId = exerciseId;
-            }
-
-            public int ExerciseId { get; }
+            public string Answer { get; }
         }
 
         public sealed class ExerciseNotInUse
@@ -102,11 +99,11 @@ namespace ExerciseFlow.API.Actors
                     var elapsed = _timer.Elapsed.Seconds;
                     if (elapsed > _time || !IsAnswerCorrect(request.Answer))
                     {
-                        Sender.Tell(new TakeAnswerResponse(_exerciseId, false));
+                        Sender.Tell(new TakeAnswerResponse(_exerciseId, false, request.Answer));
                         Context.Stop(Self);
                         break;
                     }
-                    Sender.Tell(new TakeAnswerResponse(_exerciseId, true));
+                    Sender.Tell(new TakeAnswerResponse(_exerciseId, true, request.Answer));
                     Context.Stop(Self);
                     break;
             }

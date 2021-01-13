@@ -10,7 +10,17 @@
   <ItemGroup>
     <PackageReference Include="Akka" Version="1.4.14" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.34.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.34.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Contracts\Common.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Common\EventBus.RabbitMq\Common.EventBus.RabbitMq.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\..\..\Common\Contracts\TournamentService\Protos\tournamentService.proto" GrpcServices="Client" />
   </ItemGroup>
 
   <ItemGroup>
