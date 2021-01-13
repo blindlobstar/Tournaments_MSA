@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="Actors\" />
   </ItemGroup>
 
 </Project>
