@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Akka.Actor;
-using GrpcTournamentService;
+using ExerciseFlow.API.Services;
 using Exercise = ExerciseFlow.API.Models.Exercise;
 
 namespace ExerciseFlow.API.Actors
@@ -13,7 +12,7 @@ namespace ExerciseFlow.API.Actors
             public static readonly GetTournamentExercise Instance = new GetTournamentExercise();
         }
 
-        public TournamentActor(TournamentService.TournamentServiceClient client, int tournamentId)
+        public TournamentActor(ITournamentService client, int tournamentId)
         {
             Client = client;
             TournamentId = tournamentId;
@@ -21,7 +20,7 @@ namespace ExerciseFlow.API.Actors
         }
 
         private List<Exercise> Exercises { get; }
-        private TournamentService.TournamentServiceClient Client { get; }
+        private ITournamentService Client { get; }
         private int TournamentId { get; }
 
         protected override void OnReceive(object message)
@@ -31,18 +30,9 @@ namespace ExerciseFlow.API.Actors
                 case GetTournamentExercise request:
                     if (Exercises.Count == 0)
                     {
-                        var response =
-                            Client.GetExercises(new GetExercisesRequest() { TournamentId = TournamentId });
-
-                        Exercises.AddRange(from ex in response.Exercises
-                            select new Exercise()
-                            {
-                                Answer = ex.Answer,
-                                Id = ex.Id,
-                                Text = ex.Text,
-                                OrderNumber = ex.OrderNumber,
-                                TournamentId = ex.TournamentId
-                            });
+                        var exercises =
+                            Client.GetExercises(TournamentId);
+                        Exercises.AddRange(exercises);
                     }
 
                     Sender.Tell(Exercises);
@@ -50,7 +40,7 @@ namespace ExerciseFlow.API.Actors
             }
         }
 
-        public static Props Props(TournamentService.TournamentServiceClient client, int tournamentId) =>
+        public static Props Props(ITournamentService client, int tournamentId) =>
             Akka.Actor.Props.Create(() => new TournamentActor(client, tournamentId));
     }
 }

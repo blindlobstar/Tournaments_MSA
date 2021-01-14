@@ -17,14 +17,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Contracts\Common.Contracts.csproj" />
     <ProjectReference Include="..\..\..\Common\EventBus.RabbitMq\Common.EventBus.RabbitMq.csproj" />
+    <ProjectReference Include="..\..\..\Common\GrpcUtils\GrpcUtils.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Protobuf Include="..\..\..\Common\Contracts\TournamentService\Protos\tournamentService.proto" GrpcServices="Client" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

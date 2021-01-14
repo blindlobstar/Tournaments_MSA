@@ -2,7 +2,8 @@
 using System.Linq;
 using Akka.TestKit.NUnit;
 using ExerciseFlow.API.Actors;
-using GrpcTournamentService;
+using ExerciseFlow.API.Models;
+using ExerciseFlow.API.Services;
 using Moq;
 using NUnit.Framework;
 
@@ -11,30 +12,29 @@ namespace ExerciseFlow.UnitTests.ActorsTest
     [TestFixture]
     public sealed class TournamentActorTest : TestKit
     {
-        private readonly Mock<TournamentService.TournamentServiceClient> _clientMock;
+        private readonly List<Exercise> _exercises;
 
         public TournamentActorTest()
         {
-            var exercises = new List<Exercise>()
+            _exercises = new List<Exercise>()
             {
                 new() {Id = 1, Answer = string.Empty, TournamentId = 1, Text = string.Empty},
                 new() {Id = 2, Answer = string.Empty, TournamentId = 1, Text = string.Empty},
                 new() {Id = 3, Answer = string.Empty, TournamentId = 1, Text = string.Empty},
                 new() {Id = 4, Answer = string.Empty, TournamentId = 1, Text = string.Empty}
             };
-            var response = new GetExercisesResponse();
-            response.Exercises.AddRange(exercises);
-
-            _clientMock = new Mock<TournamentService.TournamentServiceClient>();
-            _clientMock.Setup(x => x.GetExercises(It.IsAny<GetExercisesRequest>(), 
-                null, null, default)).Returns(() => response);
+            
+            
         }
 
         [Test]
         public void GetTournamentExercise_Count_4()
         {
             //Arrange
-            var actor = Sys.ActorOf(TournamentActor.Props(_clientMock.Object, 1));
+            var clientMock = new Mock<ITournamentService>();
+            clientMock.Setup(x => x.GetExercises(It.IsAny<int>())).Returns(() => _exercises);
+            var client = clientMock.Object; 
+            var actor = Sys.ActorOf(TournamentActor.Props(client, 1));
             var probe = CreateTestProbe();
 
             //Act
@@ -42,25 +42,25 @@ namespace ExerciseFlow.UnitTests.ActorsTest
 
             //Assert
             probe.ExpectMsg<IEnumerable<API.Models.Exercise>>(message => message.Count() == 4);
-            _clientMock.Verify(x => x.GetExercises(It.IsAny<GetExercisesRequest>(),
-                null, null, default), Times.Once);
+            clientMock.Verify(x => x.GetExercises(It.IsAny<int>()), Times.Once);
         }
 
         [Test]
         public void GetTournamentExercise_Count_4_Do_Not_Call_Grpc()
         {
             //Arrange
-            var actor = Sys.ActorOf(TournamentActor.Props(_clientMock.Object, 1));
+            var clientMock = new Mock<ITournamentService>();
+            clientMock.Setup(x => x.GetExercises(It.IsAny<int>())).Returns(() => _exercises);
+            var actor = Sys.ActorOf(TournamentActor.Props(clientMock.Object, 1));
             var probe = CreateTestProbe();
 
             //Act
             actor.Tell(TournamentActor.GetTournamentExercise.Instance, probe);
             actor.Tell(TournamentActor.GetTournamentExercise.Instance, probe);
             //Assert
-            probe.ExpectMsg<IEnumerable<API.Models.Exercise>>(message => message.Count() == 4);
-            probe.ExpectMsg<IEnumerable<API.Models.Exercise>>(message => message.Count() == 4);
-            _clientMock.Verify(x => x.GetExercises(It.IsAny<GetExercisesRequest>(),
-                null, null, default), Times.Once);
+            probe.ExpectMsg<IEnumerable<Exercise>>(message => message.Count() == 4);
+            probe.ExpectMsg<IEnumerable<Exercise>>(message => message.Count() == 4);
+            clientMock.Verify(x => x.GetExercises(It.IsAny<int>()), Times.Once);
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Akka.Actor;
 using Common.Core.DataExchange.EventBus;
-using GrpcTournamentService;
-using Exercise = ExerciseFlow.API.Models.Exercise;
+using ExerciseFlow.API.Services;
+using ExerciseFlow.API.Models;
 
 namespace ExerciseFlow.API.Actors
 {
@@ -39,18 +38,26 @@ namespace ExerciseFlow.API.Actors
         }
 
         private readonly IBusPublisher _busPublisher;
-        private readonly TournamentService.TournamentServiceClient _client;
+        private readonly ITournamentService _client;
         private readonly Dictionary<string, IActorRef> _idToActor;
+        private readonly IActorRef _tournamentManagerActor;
 
         public UserManagerActor(IBusPublisher busPublisher, 
-            TournamentService.TournamentServiceClient client)
+            ITournamentService client)
         {
             _busPublisher = busPublisher;
             _client = client;
+            _tournamentManagerActor = Context.ActorOf(TournamentManagerActor.Props(_client));
             _idToActor = new Dictionary<string, IActorRef>();
+            Become(WaitForExercises(null, null));
         }
 
         protected override void OnReceive(object message)
+        {
+            
+        }
+
+        public UntypedReceive WaitForExercises(IActorRef waiter, string userId) => message =>
         {
             switch (message)
             {
@@ -60,23 +67,15 @@ namespace ExerciseFlow.API.Actors
                         userRef.Forward(UserActor.GetNextQuestion.Instance);
                         break;
                     }
-                    //Get exercise from tournamentService.API
-                    var response =
-                        _client.GetExercises(new GetExercisesRequest() {TournamentId = request.TournamentId});
 
-                    var exercises = from ex in response.Exercises
-                        select new Exercise()
-                        {
-                            Answer = ex.Answer, 
-                            Id = ex.Id, 
-                            Text = ex.Text, 
-                            OrderNumber = ex.OrderNumber,
-                            TournamentId = ex.TournamentId
-                        };
-
-                    var newUserActor = Context.ActorOf(UserActor.Props(request.UserId, exercises, _busPublisher));
-                    _idToActor.Add(request.UserId, newUserActor);
-                    newUserActor.Forward(UserActor.GetNextQuestion.Instance);
+                    Become(WaitForExercises(Sender, request.UserId));
+                    _tournamentManagerActor.Tell(
+                        new TournamentManagerActor.GetTournamentExercise(request.TournamentId));
+                    break;
+                case List<Exercise> exercises:
+                    var newUserActor = Context.ActorOf(UserActor.Props(userId, exercises, _busPublisher));
+                    _idToActor.Add(userId, newUserActor);
+                    newUserActor.Tell(UserActor.GetNextQuestion.Instance, waiter);
                     break;
                 case TakeUserAnswer request:
                     if (_idToActor.TryGetValue(request.UserId, out var userThatAnswered))
@@ -84,9 +83,13 @@ namespace ExerciseFlow.API.Actors
                         userThatAnswered.Tell(new ExerciseActor.TakeAnswerRequest(request.Answer));
                         break;
                     }
+
                     Sender.Tell(UserDoNotWaitForAnAnswer.Instance);
                     break;
             }
-        }
+        };
+
+        public static Props Props(IBusPublisher busPublisher, ITournamentService tournamentService) =>
+            Akka.Actor.Props.Create(() => new UserManagerActor(busPublisher, tournamentService));
     }
 }
