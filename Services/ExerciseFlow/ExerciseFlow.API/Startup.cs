@@ -40,7 +40,7 @@ namespace ExerciseFlow.API
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApplicationLifetime lifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             //Creating Actor System
             lifetime.ApplicationStarted.Register(() => app.ApplicationServices.GetService<ActorSystem>());
