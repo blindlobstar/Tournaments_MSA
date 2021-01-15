@@ -85,8 +85,10 @@ namespace ExerciseFlow.API.Actors
         {
             switch (message)
             {
-                case GetExerciseRequest request:
-                    _timer.Start();
+                case GetExerciseRequest:
+                    if(!_timer.IsRunning)
+                        _timer.Start();
+
                     Sender.Tell(new GetExerciseResponse(_question, _time));
                     break;
                 case TakeAnswerRequest request:
@@ -95,6 +97,7 @@ namespace ExerciseFlow.API.Actors
                         Sender.Tell(new ExerciseNotInUse(_exerciseId));
                         break;
                     }
+                    
                     _timer.Stop();
                     var elapsed = _timer.Elapsed.Seconds;
                     if (elapsed > _time || !IsAnswerCorrect(request.Answer))
@@ -103,6 +106,7 @@ namespace ExerciseFlow.API.Actors
                         Context.Stop(Self);
                         break;
                     }
+                    
                     Sender.Tell(new TakeAnswerResponse(_exerciseId, true, request.Answer));
                     Context.Stop(Self);
                     break;

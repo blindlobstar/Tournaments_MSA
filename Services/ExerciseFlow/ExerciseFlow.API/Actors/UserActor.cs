@@ -24,14 +24,22 @@ namespace ExerciseFlow.API.Actors
         private readonly string _userId;
         private readonly Queue<IActorRef> _unansweredExercises;
         private readonly IBusPublisher _busPublisher;
+        private readonly Dictionary<int, IActorRef> _exerciseIdToActor;
 
         public UserActor(string userId, IEnumerable<Exercise> exercises, IBusPublisher busPublisher)
         {
             _userId = userId;
             _busPublisher = busPublisher;
-            var exerciseActors = exercises.Select(e =>
-                Context.ActorOf(ExerciseActor.Props(e.Id, e.Text, e.Answer, 15)));
-            _unansweredExercises = new Queue<IActorRef>(exerciseActors);
+            _exerciseIdToActor = new Dictionary<int, IActorRef>();
+
+            exercises
+                .Select(e => new { 
+                    actor = Context.ActorOf(ExerciseActor.Props(e.Id, e.Text, e.Answer, 15)),
+                    ex = e.Id
+                })
+                .ForEach(x => _exerciseIdToActor.Add(x.ex, x.actor));
+
+            _unansweredExercises = new Queue<IActorRef>(_exerciseIdToActor.Values);
             
         }
 
@@ -41,8 +49,8 @@ namespace ExerciseFlow.API.Actors
         {
             switch (message)
             {
-                case GetNextQuestion request:
-                    if (!_unansweredExercises.TryDequeue(out var exerciseActorRef))
+                case GetNextQuestion _:
+                    if (!_unansweredExercises.TryPeek(out var exerciseActorRef))
                     {
                         Sender.Tell(NoMoreQuestions.Instance);
                         Context.Stop(Self);
@@ -53,10 +61,14 @@ namespace ExerciseFlow.API.Actors
                     break;
                 case ExerciseActor.TakeAnswerRequest request:
                     CurrentEx.Tell(request);
+                    CurrentEx = _unansweredExercises.Dequeue();
                     break;
                 case ExerciseActor.TakeAnswerResponse request:
                     _busPublisher.Send(new AddAnswer()
                         {ExerciseId = request.ExerciseId, UserId = _userId, UserAnswer = request.Answer});
+                    break;
+                case Terminated _:
+
                     break;
             }
         }

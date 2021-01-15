@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Akka.Actor;
@@ -20,8 +21,8 @@ namespace ExerciseFlow.UnitTests.ActorsTest
 
         public UserActorTest()
         {
-            _busPublisherMock = new Mock<IBusPublisher>(MockBehavior.Strict);
-            _busPublisherMock.Setup(b => b.Send(It.IsAny<ICommand>()));
+            _busPublisherMock = new Mock<IBusPublisher>(MockBehavior.Loose);
+            _busPublisherMock.Setup(b => b.Send(It.IsAny<ICommand>())).Returns(Task.CompletedTask);
             _exercises = new List<Exercise>()
             {
                 new() {Id = 1, Text = "1+1", Answer = "2", TournamentId = 1},
@@ -44,18 +45,36 @@ namespace ExerciseFlow.UnitTests.ActorsTest
         }
 
         [Test]
-        public async Task GetNext_FirstAndSecondExercise()
+        public async Task GetNext_Firs_2_times_without_answer()
         {
             //Arrange
             var userActor = Sys.ActorOf(UserActor.Props("1", _exercises, _busPublisherMock.Object));
-            
+            var probe = CreateTestProbe();
+
             //Act
-            var exercise1 = await userActor.Ask<ExerciseActor.GetExerciseResponse>(UserActor.GetNextQuestion.Instance);
-            var exercise2 = await userActor.Ask<ExerciseActor.GetExerciseResponse>(UserActor.GetNextQuestion.Instance);
+            userActor.Tell(UserActor.GetNextQuestion.Instance, probe);
+            userActor.Tell(UserActor.GetNextQuestion.Instance, probe);
 
             //Assert
-            Assert.AreEqual(_exercises.First().Text, exercise1.Question);
-            Assert.AreEqual(_exercises.First(x => x.Id == 2).Text, exercise2.Question);
+            probe.ExpectMsg<ExerciseActor.GetExerciseResponse>(msg => msg.Question == "1+1");
+            probe.ExpectMsg<ExerciseActor.GetExerciseResponse>(msg => msg.Question == "1+1");
+        }
+
+        [Test]
+        public async Task GetNext_2_times_with_answer()
+        {
+            //Arrange
+            var userActor = Sys.ActorOf(UserActor.Props("1", _exercises, _busPublisherMock.Object));
+            var probe = CreateTestProbe();
+
+            //Act
+            userActor.Tell(UserActor.GetNextQuestion.Instance);
+            userActor.Tell(new ExerciseActor.TakeAnswerRequest(string.Empty));
+            userActor.Tell(UserActor.GetNextQuestion.Instance, probe);
+
+            //Assert
+            probe.ExpectMsg<ExerciseActor.GetExerciseResponse>(msg => msg.Question == "1+2", TimeSpan.FromMilliseconds(10000));
+
         }
 
         [Test]
@@ -66,13 +85,16 @@ namespace ExerciseFlow.UnitTests.ActorsTest
             var probe = CreateTestProbe();
 
             //Act
-           userActor.Tell(UserActor.GetNextQuestion.Instance);
-           userActor.Tell(UserActor.GetNextQuestion.Instance);
-           userActor.Tell(UserActor.GetNextQuestion.Instance);
-           userActor.Tell(UserActor.GetNextQuestion.Instance, probe);
+            userActor.Tell(UserActor.GetNextQuestion.Instance);
+            userActor.Tell(new ExerciseActor.TakeAnswerRequest(string.Empty));
+            userActor.Tell(UserActor.GetNextQuestion.Instance);
+            userActor.Tell(new ExerciseActor.TakeAnswerRequest(string.Empty));
+            userActor.Tell(UserActor.GetNextQuestion.Instance);
+            userActor.Tell(new ExerciseActor.TakeAnswerRequest(string.Empty));
+            userActor.Tell(UserActor.GetNextQuestion.Instance, probe);
 
-           //Assert
-           probe.ExpectMsg<UserActor.NoMoreQuestions>();
+            //Assert
+            probe.ExpectMsg<UserActor.NoMoreQuestions>();
         }
 
         [Test]
@@ -85,7 +107,7 @@ namespace ExerciseFlow.UnitTests.ActorsTest
             //Act
             userActor.Tell(UserActor.GetNextQuestion.Instance, probe);
             userActor.Tell(new ExerciseActor.TakeAnswerRequest("2"), probe);
-            
+
             //Assert
             probe.AwaitAssert(() => _busPublisherMock.Verify(e => e.Send(It.IsAny<ICommand>()), Times.AtLeastOnce));
         }
