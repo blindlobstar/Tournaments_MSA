@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+message GetQuestionRequest {
+	string userId = 1;
+	int32 tournamentId = 2;
+}
+
+message GetQuestionResponse {
+	string text = 1;
+	google.protobuf.Int32Value time = 2;
+}
+
+service ExerciseFlowService {
+	rpc GetQuestion(GetQuestionRequest) returns (GetQuestionResponse);
+}

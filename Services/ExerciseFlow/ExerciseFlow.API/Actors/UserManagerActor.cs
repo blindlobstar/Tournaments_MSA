@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Akka.Actor;
 using Common.Core.DataExchange.EventBus;
 using ExerciseFlow.API.Services;
@@ -49,7 +50,7 @@ namespace ExerciseFlow.API.Actors
             _client = client;
             _tournamentManagerActor = Context.ActorOf(TournamentManagerActor.Props(_client));
             _idToActor = new Dictionary<string, IActorRef>();
-            Become(WaitForExercises(null, null));
+            Become(WaitForExercises(new Dictionary<string, IActorRef>(), new List<(string, int)>()));
         }
 
         protected override void OnReceive(object message)
@@ -57,25 +58,44 @@ namespace ExerciseFlow.API.Actors
             
         }
 
-        public UntypedReceive WaitForExercises(IActorRef waiter, string userId) => message =>
+        public UntypedReceive WaitForExercises(Dictionary<string, IActorRef> waiters, 
+            List<(string, int)> tournamentToUser) => message =>
         {
             switch (message)
             {
                 case GetQuestionForUser request:
+                    //If user actor exist, just forward a message from sender
                     if (_idToActor.TryGetValue(request.UserId, out var userRef))
                     {
                         userRef.Forward(UserActor.GetNextQuestion.Instance);
                         break;
                     }
 
-                    Become(WaitForExercises(Sender, request.UserId));
+                    //Otherwise add user for a waiter list and become to wait for exercise state
+                    waiters.Add(request.UserId, Sender);
+                    tournamentToUser.Add((request.UserId, request.TournamentId));
+                    Become(WaitForExercises(waiters, tournamentToUser));
+
                     _tournamentManagerActor.Tell(
                         new TournamentManagerActor.GetTournamentExercise(request.TournamentId));
                     break;
                 case List<Exercise> exercises:
-                    var newUserActor = Context.ActorOf(UserActor.Props(userId, exercises, _busPublisher));
-                    _idToActor.Add(userId, newUserActor);
+                    //Get exercises TournamentId 
+                    var tournamentId = exercises.First().TournamentId;
+                    
+                    //Find user and sender, that wait for exercises, from this tournament
+                    var userTournament = tournamentToUser.First(x => x.Item2 == tournamentId);
+                    var waiter = waiters[userTournament.Item1];
+                    
+                    //Create user actor, and ask him for a next question
+                    var newUserActor = Context.ActorOf(UserActor.Props(userTournament.Item1, exercises, _busPublisher));
+                        _idToActor.Add(userTournament.Item1, newUserActor);
                     newUserActor.Tell(UserActor.GetNextQuestion.Instance, waiter);
+                    
+                    //Remove user for waiter list, and become to next state
+                    tournamentToUser.Remove(userTournament);
+                    waiters.Remove(userTournament.Item1);
+                    Become(WaitForExercises(waiters, tournamentToUser));
                     break;
                 case TakeUserAnswer request:
                     if (_idToActor.TryGetValue(request.UserId, out var userThatAnswered))

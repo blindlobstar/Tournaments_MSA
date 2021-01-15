@@ -25,8 +25,8 @@ namespace ExerciseFlow.UnitTests.ActorsTest
             {
                 new() {Id = 1, Answer = string.Empty, TournamentId = 1, Text = "1"},
                 new() {Id = 2, Answer = string.Empty, TournamentId = 1, Text = "2"},
-                new() {Id = 3, Answer = string.Empty, TournamentId = 1, Text = "3"},
-                new() {Id = 4, Answer = string.Empty, TournamentId = 1, Text = "4"}
+                new() {Id = 3, Answer = string.Empty, TournamentId = 2, Text = "3"},
+                new() {Id = 4, Answer = string.Empty, TournamentId = 2, Text = "4"}
             };
         }
 
@@ -48,7 +48,7 @@ namespace ExerciseFlow.UnitTests.ActorsTest
         }
 
         [Test]
-        public void GetQuestion_UserId_1_return_Exercise_Text_1_UserId_2_Exercise_Text_3()
+        public async Task GetQuestion_UserId_1_return_Exercise_Text_1_UserId_2_Exercise_Text_3_user_2_is_faster()
         {
             //Arrange
             var clientMock = new Mock<ITournamentService>();
@@ -66,10 +66,14 @@ namespace ExerciseFlow.UnitTests.ActorsTest
             var task2 = actor.Ask(new UserManagerActor.GetQuestionForUser("2", 2));
 
             var fastestTask = Task.WaitAny(task1, task2);
+
+            var ex1 = (await task1) as ExerciseActor.GetExerciseResponse;
+            var ex2 = (await task2) as ExerciseActor.GetExerciseResponse;
             
             //Assert
             Assert.AreEqual(task2.Id, fastestTask);
+            Assert.AreEqual("1", ex1.Question);
+            Assert.AreEqual("3", ex2.Question);
         }
-
     }
 }

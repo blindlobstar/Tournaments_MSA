@@ -1,16 +1,18 @@
 ﻿using System;
 using Akka.Actor;
+using Common.Contracts.ExerciseFlow.Commands;
 using Common.Core.DataExchange.EventBus;
+using Common.Core.DataExchange.Handlers;
 using Common.EventBus.RabbitMq;
 using ExerciseFlow.API.Actors;
 using ExerciseFlow.API.Actors.Providers;
+using ExerciseFlow.API.Handlers;
 using ExerciseFlow.API.Services;
 using GrpcUtils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using IApplicationLifetime = Microsoft.AspNetCore.Hosting.IApplicationLifetime;
 
 namespace ExerciseFlow.API
 {
@@ -38,6 +40,11 @@ namespace ExerciseFlow.API
                 var client = sp.GetRequiredService<ITournamentService>();
                 return () => system.ActorOf(UserManagerActor.Props(publisher, client));
             });
+
+            //Register handlers
+            services.AddScoped<ICommandHandler<AddUserAnswer>, AddUserAnswerHandler>();
+
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
@@ -56,8 +63,11 @@ namespace ExerciseFlow.API
 
             app.UseEndpoints(endpoints =>
             {
-                
+                endpoints.MapGrpcService<Services.ExerciseFlowService>();
             });
+
+            app.UseRabbitMq()
+                .SubscribeCommand<AddUserAnswer>();
         }
     }
 }
